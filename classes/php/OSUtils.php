@@ -36,7 +36,7 @@ final class OSUtils {
     /**
      * Determine which OS PHP is running on
      *
-     * @return OS_WIN or OS_UNIX
+     * @return OSUtils::OS_WIN or OSUtils::OS_UNIX
      */
     private function determineOsType() {
         // Not very good determination, but it'll do
@@ -63,7 +63,7 @@ final class OSUtils {
 
         exec(self::buildCommand(self::CMD_DIFF, [$filename1, $filename2]), $output, $rc);
 
-        return [$output, $rc];
+        return ['output' => $output, 'return_code' => $rc];
     }
 
     private static function buildCommand($cmd, array $args) {
