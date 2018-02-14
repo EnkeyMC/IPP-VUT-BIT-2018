@@ -53,7 +53,7 @@ final class ArgParser {
         foreach($arguments as $argument => $value) {
             $longOpt = $this->getLongOptFromShortOpt($argument);
 
-            if ($longOpt === NULL) {
+            if ($longOpt === null) {
                 $mergedArguments[$argument] = $value;
             } else {
                 $mergedArguments[$longOpt] = $value;
@@ -65,10 +65,14 @@ final class ArgParser {
 
     private function getLongOptFromShortOpt($option) {
         foreach ($this->options as $longOpt => $shortOpt) {
-            if ($shortOpt == $option)
-                return $longOpt;
+            if (self::stripColons($shortOpt) == $option)
+                return self::stripColons($longOpt);
         }
 
         return null;
+    }
+
+    private static function stripColons($option) {
+        return trim($option, ':');
     }
 }
