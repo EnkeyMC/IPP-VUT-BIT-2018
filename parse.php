@@ -2,4 +2,5 @@
 
 require_once 'autoload.php';
 
-$out = new XMLOutput();
+$parser = ParserApp::getInstance();
+$parser->run();
