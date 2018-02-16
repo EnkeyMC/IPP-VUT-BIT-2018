@@ -7,12 +7,14 @@ final class XMLOutputTest extends TestCase
     const TEST_OPCODE = 'TEST';
 
     private $XMLWriterMock;
+    private $dummy;
 
     public function setUp() {
         $this->XMLWriterMock = $this->getMockBuilder(XMLWriter::class)->getMock();
+        $this->dummy = new XMLOutput($this->XMLWriterMock);
     }
 
-    private function setupMockConstructorExpectations() {
+    public function testStartOutput() {
         $this->XMLWriterMock->expects($this->once())->method('openMemory');
         $this->XMLWriterMock->expects($this->once())->method('startDocument')
                             ->with(XMLOutput::XML_VERSION, XMLOutput::XML_ENCODING);
@@ -23,70 +25,57 @@ final class XMLOutputTest extends TestCase
         $this->XMLWriterMock->expects($this->once())->method('text')
                             ->with(XMLOutput::LANGUAGE);
         $this->XMLWriterMock->expects($this->once())->method('endAttribute');
-    }
 
-    public function testConstructor() {
-        $this->setupMockConstructorExpectations();
-        new XMLOutput($this->XMLWriterMock);
+        $this->dummy->startOutput();
     }
 
     public function testEndOutput() {
         $this->XMLWriterMock->expects($this->once())->method('endElement');
         $this->XMLWriterMock->expects($this->once())->method('endDocument');
 
-        $xo = new XMLOutput($this->XMLWriterMock);
-        $xo->endOutput();
+        $this->dummy->endOutput();
     }
 
     public function testGetOutput() {
         $this->XMLWriterMock->method('outputMemory')->willReturn('xml_output');
 
-        $xo = new XMLOutput($this->XMLWriterMock);
-        $this->assertSame('xml_output', $xo->getOutput());
+        $this->assertSame('xml_output', $this->dummy->getOutput());
     }
 
     public function testStartInstruction() {
         $this->XMLWriterMock->method('startElement')
                             ->withConsecutive(
-                                [XMLOutput::EL_PROGRAM],
                                 [XMLOutput::EL_INSTRUCTION]);
         $this->XMLWriterMock->method('startAttribute')
                             ->withConsecutive(
-                                [XMLOutput::ATTR_LANGUAGE],
                                 [XMLOutput::ATTR_ORDER],
                                 [XMLOutput::ATTR_OPCODE]);
         $this->XMLWriterMock->method('text')
                             ->withConsecutive(
-                                [XMLOutput::LANGUAGE],
                                 [1],
                                 [self::TEST_OPCODE]);
-        $this->XMLWriterMock->expects($this->exactly(3))->method('endAttribute');
+        $this->XMLWriterMock->expects($this->exactly(2))->method('endAttribute');
 
-        $xo = new XMLOutput($this->XMLWriterMock);
-        $xo->startInstruction(self::TEST_OPCODE);
+        $this->dummy->startInstruction(self::TEST_OPCODE);
     }
 
     public function testEndInstruction() {
         $this->XMLWriterMock->expects($this->once())->method('endElement');
 
-        $xo = new XMLOutput($this->XMLWriterMock);
-        $xo->endInstruction();
+        $this->dummy->endInstruction();
     }
 
     public function testAddArgument() {
         $this->XMLWriterMock->method('startElement')
                             ->withConsecutive(
-                                [XMLOutput::EL_PROGRAM],
                                 [XMLOutput::EL_ARG . '1']);
         $this->XMLWriterMock->method('text')
                             ->withConsecutive(
-                                [XMLOutput::LANGUAGE],
                                 ['label'],
                                 ['test_text']);
         $this->XMLWriterMock->expects($this->once())->method('endElement');
 
-        $xo = new XMLOutput($this->XMLWriterMock);
-        $xo->addArgument(1, 'label', 'test_text');
+        $this->dummy->addArgument(1, 'label', 'test_text');
     }
 
     public function testXMLOutput() {
@@ -102,6 +91,7 @@ final class XMLOutputTest extends TestCase
              </program>';
 
         $xo = new XMLOutput();
+        $xo->startOutput();
         $xo->startInstruction('DEFVAR');
         $xo->addArgument(1, 'var', 'GF@var');
         $xo->endInstruction();

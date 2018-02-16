@@ -38,6 +38,9 @@ final class XMLOutput
             $this->xw = $writer;
 
         $this->instructionOrder = 1;
+    }
+
+    public function startOutput() {
         $this->xw->openMemory();
         $this->xw->startDocument(self::XML_VERSION, self::XML_ENCODING);
         $this->xw->setIndent(true);
