@@ -8,6 +8,43 @@ final class Lexer {
     const STATE_OPCODE = 'getOpcodeToken';
     const STATE_ARG = 'getArgToken';
 
+    const OPCODE_LIST = [
+        'MOVE' => 0,
+        'CREATEFRAME' => 0,
+        'PUSHFRAME' => 0,
+        'POPFRAME' => 0,
+        'DEFVAR' => 0,
+        'CALL' => 0,
+        'RETURN' => 0,
+        'PUSHS' => 0,
+        'POPS' => 0,
+        'ADD' => 0,
+        'SUB' => 0,
+        'MUL' => 0,
+        'IDIV' => 0,
+        'LT' => 0,
+        'GT' => 0,
+        'EQ' => 0,
+        'AND' => 0,
+        'OR' => 0,
+        'NOT' => 0,
+        'INT2CHAR' => 0,
+        'STRI2INT' => 0,
+        'READ' => 0,
+        'WRITE' => 0,
+        'CONCAT' => 0,
+        'STRLEN' => 0,
+        'GETCHAR' => 0,
+        'SETCHAR' => 0,
+        'TYPE' => 0,
+        'LABEL' => 0,
+        'JUMP' => 0,
+        'JUMPIFEQ' => 0,
+        'JUMPIFNEQ' => 0,
+        'DPRINT' => 0,
+        'BREAK' => 0
+    ];
+
     private $state;
     private $inputStream;
     private $lineNum;
