@@ -10,7 +10,7 @@ class LexerTest extends TestCase {
     public function setUp()
     {
         $this->stream = fopen('php://memory', 'w+');
-        $this->lexer = new Lexer($this->stream);
+        $this->lexer = new Lexer(new IPPcode18(), $this->stream);
     }
 
     public function tearDown()
@@ -27,10 +27,10 @@ class LexerTest extends TestCase {
     }
 
     public function testHeaderToken() {
-        $this->writeInputStream(Lexer::HEADER);
+        $this->writeInputStream(IPPcode18::HEADER);
         $this->resetStream();
 
-        $expected = new Token(Token::HEADER, Lexer::HEADER);
+        $expected = new Token(Token::HEADER, IPPcode18::HEADER);
 
         $this->assertEquals($expected, $this->lexer->getNextToken());
     }
@@ -44,10 +44,10 @@ class LexerTest extends TestCase {
     }
 
     public function testHeaderWithComment() {
-        $this->writeInputStream(Lexer::HEADER.'#comment');
+        $this->writeInputStream(IPPcode18::HEADER.'#comment');
         $this->resetStream();
 
-        $expected = new Token(Token::HEADER, Lexer::HEADER);
+        $expected = new Token(Token::HEADER, IPPcode18::HEADER);
 
         $this->assertEquals($expected, $this->lexer->getNextToken());
     }
@@ -61,16 +61,16 @@ class LexerTest extends TestCase {
     }
 
     public function testHeaderSpaceComment() {
-        $this->writeInputStream(Lexer::HEADER.'   # a comment');
+        $this->writeInputStream(IPPcode18::HEADER.'   # a comment');
         $this->resetStream();
 
-        $expected = new Token(Token::HEADER, Lexer::HEADER);
+        $expected = new Token(Token::HEADER, IPPcode18::HEADER);
 
         $this->assertEquals($expected, $this->lexer->getNextToken());
     }
 
     public function testHeaderWithLeadingSpaces() {
-        $this->writeInputStream('   '.Lexer::HEADER);
+        $this->writeInputStream('   '.IPPcode18::HEADER);
         $this->resetStream();
 
         $this->expectException(LexicalErrorException::class);
