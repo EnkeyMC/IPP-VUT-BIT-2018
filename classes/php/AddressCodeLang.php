@@ -6,6 +6,6 @@ abstract class AddressCodeLang {
     public abstract function getCommentSeparator();
     public abstract function getAddressSeparator();
     public abstract function isValidOpcode($opcode);
-    public abstract function isValidAddress($addr_type, $addr);
-    public abstract function getAddressToken($addr_type, $addr);
+    public abstract function isValidAddress($addrType, $addr);
+    public abstract function getAddressToken($addrType, $addr);
 }

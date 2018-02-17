@@ -14,7 +14,7 @@ class IPPcode18 extends AddressCodeLang {
 
     const REGEX_LIST = [
         self::ARG_VAR => '/^[LTG]F@[a-zA-Z\-_&$*%][a-zA-Z\-_&$*%0-9]*$/',
-        self::ARG_SYMB => '/^([LTG]F@[a-zA-Z\-_&$*%][a-zA-Z\-_&$*%\d]*|int@[^\s]+|bool@(true|false)|string@([^\s#\\\\]*(\\\\\d\d\d)?)*)$/',
+        self::ARG_SYMB => '/^([LTG]F@[a-zA-Z\-_&$*%][a-zA-Z\-_&$*%\d]*|(int)@([^\s]+)|(bool)@(true|false)|(string)@(([^\s#\\\\]*(\\\\\d\d\d)?)*))$/u',
         self::ARG_LABEL => '/^[a-zA-Z\-_&$*%][a-zA-Z\-_&$*%0-9]*$/',
         self::ARG_TYPE => '/^(int|string|bool)$/'
     ];
@@ -82,20 +82,51 @@ class IPPcode18 extends AddressCodeLang {
         return array_key_exists($opcode, self::INSTRUCTION_LIST);
     }
 
-    public function isValidAddress($addr_type, $addr)
+    public function isValidAddress($addrType, $addr)
     {
-        if (!array_key_exists($addr_type, self::REGEX_LIST))
-            throw new InvalidAddressTypeException('Invalid address type given to IPPcode18::isValidAddress() ('.$addr_type.')');
-        $rv = preg_match(self::REGEX_LIST[$addr_type], $addr);
+        if (!array_key_exists($addrType, self::REGEX_LIST))
+            throw new InvalidAddressTypeException('Invalid address type given to IPPcode18::isValidAddress() ('.$addrType.')');
 
+        $rv = preg_match(self::REGEX_LIST[$addrType], $addr);
         if ($rv === false)
-            throw new RegexErrorException('Error occured during matching of regex: ' . self::REGEX_LIST[$addr_type]);
+            throw new RegexErrorException('Error occured during matching of regex: ' . self::REGEX_LIST[$addrType]);
 
         return $rv === 1 ? true : false;
     }
 
-    public function getAddressToken($addr_type, $addr)
+    public function getAddressToken($addrType, $addr)
     {
+        $matchGroups = array();
+        preg_match(self::REGEX_LIST[$addrType], $addr, $matchGroups);
 
+        return $this->getTokenFromMatchGroups($addrType, $matchGroups);
+    }
+
+    private function getTokenFromMatchGroups($addrType, $matchGroups) {
+        switch ($addrType) {
+            case self::ARG_VAR: {
+                return new Token(Token::ARG_VAR, $matchGroups[0]);
+            }
+            case self::ARG_SYMB: {
+                if (sizeof($matchGroups) < 3) {
+                    return new Token(Token::ARG_VAR, $matchGroups[0]);
+                } else {
+                    $i = 2;
+
+                    while ($matchGroups[$i] === '')
+                        ++$i;
+
+                    return new Token($matchGroups[$i], $matchGroups[$i + 1]);
+                }
+            }
+            case self::ARG_LABEL: {
+                return new Token(Token::ARG_LABEL, $matchGroups[0]);
+            }
+            case self::ARG_TYPE: {
+                return new Token(Token::ARG_TYPE, $matchGroups[0]);
+            }
+        }
+
+        return null;
     }
 }

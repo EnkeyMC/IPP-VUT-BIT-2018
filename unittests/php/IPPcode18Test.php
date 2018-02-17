@@ -157,4 +157,47 @@ class IPPcode18Test extends TestCase {
         $this->assertTrue($this->lang->isValidAddress(IPPcode18::ARG_TYPE, 'string'));
         $this->assertTrue($this->lang->isValidAddress(IPPcode18::ARG_TYPE, 'bool'));
     }
+
+    public function testGetAddressTokenVar() {
+        $expected = new Token(Token::ARG_VAR, 'GF@var');
+
+        $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_VAR, 'GF@var'));
+        $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_SYMB, 'GF@var'));
+    }
+
+    public function testGetAddressTokenConstInt() {
+        $expected = new Token(Token::ARG_INT, '-9');
+
+        $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_SYMB, 'int@-9'));
+    }
+
+    public function testGetAddressTokenConstBool() {
+        $expected = new Token(Token::ARG_BOOL, 'true');
+
+        $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_SYMB, 'bool@true'));
+    }
+
+    public function testGetAddressTokenConstString() {
+        $expected = new Token(Token::ARG_STRING, 'AhršěřOFso');
+
+        $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_SYMB, 'string@AhršěřOFso'));
+    }
+
+    public function testGetAddressTokenConstEmptyString() {
+        $expected = new Token(Token::ARG_STRING, '');
+
+        $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_SYMB, 'string@'));
+    }
+
+    public function testGetAddressTokenLabel() {
+        $expected = new Token(Token::ARG_LABEL, 'labEL1');
+
+        $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_LABEL, 'labEL1'));
+    }
+
+    public function testGetAddressTokenType() {
+        $expected = new Token(Token::ARG_TYPE, 'int');
+
+        $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_TYPE, 'int'));
+    }
 }
