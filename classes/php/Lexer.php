@@ -51,6 +51,7 @@ final class Lexer {
     }
 
     private function getOpcodeToken() {
+        $line = fgets($this->inputStream);
 
     }
 

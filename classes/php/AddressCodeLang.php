@@ -8,4 +8,5 @@ abstract class AddressCodeLang {
     public abstract function isValidOpcode($opcode);
     public abstract function isValidAddress($addrType, $addr);
     public abstract function getAddressToken($addrType, $addr);
+    public abstract function splitInstruction($instruction);
 }

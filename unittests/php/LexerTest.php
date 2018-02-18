@@ -77,4 +77,25 @@ class LexerTest extends TestCase {
 
         $this->lexer->getNextToken();
     }
+
+    public function testInstruction() {
+        $this->writeInputStream('DEFvar GF@var');
+        $this->resetStream();
+
+        $this->lexer->setContext(Lexer::CONTEXT_INSTRUCTION);
+
+        $expected = new Token(Token::OPCODE, 'DEFVAR');
+
+        $this->assertEquals($expected, $this->lexer->getNextToken());
+    }
+
+    public function testInvalidInstruction() {
+        $this->writeInputStream('INVALID');
+        $this->resetStream();
+        $this->lexer->setContext(Lexer::CONTEXT_INSTRUCTION);
+
+        $this->expectException(LexicalErrorException::class);
+
+        $this->lexer->getNextToken();
+    }
 }

@@ -5,7 +5,7 @@ class IPPcode18 extends AddressCodeLang {
     const HEADER = '.IPPcode18';
 
     const COMMENT_SEPARATOR = '#';
-    const ADDRESS_SEPARATOR = ' ';
+    const ADDRESS_SEPARATOR = " \t";
 
     const ARG_VAR = 0;
     const ARG_SYMB = 1;
@@ -128,5 +128,10 @@ class IPPcode18 extends AddressCodeLang {
         }
 
         return null;
+    }
+
+    public function splitInstruction($instruction)
+    {
+
     }
 }
