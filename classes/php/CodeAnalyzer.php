@@ -41,6 +41,10 @@ final class CodeAnalyzer {
             throw new InvalidContextException();
     }
 
+    public function getArgumentOrder() {
+        return $this->argN;
+    }
+
     private function getHeaderToken() {
         if (feof($this->inputStream))
             throw new LexicalErrorException($this->getErrorMsg($this->lang->getHeader(), 'EOF'));

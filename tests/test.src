@@ -1,0 +1,5 @@
+.IPPcode18
+
+defvar GF@var
+move GF@var int@42
+add GF@var GF@var int@3 # wooot
