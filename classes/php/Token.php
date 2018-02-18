@@ -3,6 +3,7 @@
 class Token {
     const HEADER = 0;
     const OPCODE = 1;
+    const EOL = 2;
     const EOF = 3;
     const ARG_VAR = 'var';
     const ARG_INT = 'int';

@@ -5,7 +5,6 @@ class IPPcode18 extends AddressCodeLang {
     const HEADER = '.IPPcode18';
 
     const COMMENT_SEPARATOR = '#';
-    const ADDRESS_SEPARATOR = " \t";
 
     const ARG_VAR = 0;
     const ARG_SYMB = 1;
@@ -71,15 +70,14 @@ class IPPcode18 extends AddressCodeLang {
         return self::COMMENT_SEPARATOR;
     }
 
-    public function getAddressSeparator()
-    {
-        return self::ADDRESS_SEPARATOR;
-    }
-
     public function isValidOpcode($opcode)
     {
         $opcode = strtoupper($opcode);
         return array_key_exists($opcode, self::INSTRUCTION_LIST);
+    }
+
+    public function getOpcodeToken($opcode) {
+        return new Token(Token::OPCODE, strtoupper($opcode));
     }
 
     public function isValidAddress($addrType, $addr)
@@ -132,6 +130,14 @@ class IPPcode18 extends AddressCodeLang {
 
     public function splitInstruction($instruction)
     {
+        return preg_split("/\\s+/", $instruction);
+    }
 
+    public function getArgumentType($opcode, $n)
+    {
+        if (array_key_exists(--$n, self::INSTRUCTION_LIST[$opcode]))
+            return self::INSTRUCTION_LIST[$opcode][$n];
+        else
+            return null;
     }
 }

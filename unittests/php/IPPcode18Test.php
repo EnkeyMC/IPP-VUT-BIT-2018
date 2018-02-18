@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 class IPPcode18Test extends TestCase {
 
+    /** @var  IPPcode18 instance */
     private $lang;
 
     public function setUp()
@@ -19,8 +20,16 @@ class IPPcode18Test extends TestCase {
         $this->assertSame('#', $this->lang->getCommentSeparator());
     }
 
-    public function testAddressSeparator() {
-        $this->assertSame(' ', $this->lang->getAddressSeparator());
+    public function testSplitInstruction() {
+        $expected = ['OPCODE', 'arg1', 'arg2', 'arg3'];
+
+        $this->assertEquals($expected, $this->lang->splitInstruction("OPCODE\targ1   \t  arg2  arg3"));
+    }
+
+    public function testSplitInstructionNoArgs() {
+        $expected = ['OPCODE'];
+
+        $this->assertEquals($expected, $this->lang->splitInstruction('OPCODE'));
     }
 
     public function testValidOpcodes() {
@@ -199,5 +208,13 @@ class IPPcode18Test extends TestCase {
         $expected = new Token(Token::ARG_TYPE, 'int');
 
         $this->assertEquals($expected, $this->lang->getAddressToken(IPPcode18::ARG_TYPE, 'int'));
+    }
+
+    public function testGetArgumentType() {
+        $this->assertSame(IPPcode18::ARG_SYMB, $this->lang->getArgumentType('WRITE', 1));
+    }
+
+    public function testGetArgumentTypeInvalid() {
+        $this->assertSame(null, $this->lang->getArgumentType('WRITE', 2));
     }
 }
