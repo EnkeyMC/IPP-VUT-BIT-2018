@@ -3,4 +3,4 @@
 require_once 'autoload.php';
 
 $parser = ParserApp::getInstance();
-return $parser->run();
+exit($parser->run());

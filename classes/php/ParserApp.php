@@ -2,9 +2,23 @@
 
 class ParserApp extends App
 {
-    const OPTIONS = ['help' => 'h', 'src:' => 's:'];
+    const OPTIONS = [
+        'help' => 'h',
+        'src:' => 's:',
+        'out:' => 'o:',
+        'stats:' => '',
+        'loc' => 'l',
+        'comments' => 'c'
+    ];
 
-    const ERROR_CODE = 21;
+    /** @var  resource */
+    private $inputStream;
+    /** @var resource */
+    private $outputStream;
+    /** @var  CodeAnalyzer */
+    private $codeAnalyzer;
+    /** @var  XMLOutput */
+    private $xmlOutput;
 
     public function run() {
         if ($this->getConfig('help')) {
@@ -12,46 +26,21 @@ class ParserApp extends App
             return ExitCodes::SUCCESS;
         }
 
-        $stream = STDIN;
-        $src = $this->getConfig('src');
-        if ($src !== false) {
-            $stream = fopen($src, 'r');
-
-            if ($stream === false) {
-                throw new Exception('Failed to open file: '.$src);
-            }
-        }
-
-        $codeAnalyzer = new CodeAnalyzer(new IPPcode18(), $stream);
-        $xmlOutput = new XMLOutput();
-        $xmlOutput->startOutput();
-        $token = null;
-        $processingInst = false;
+        $rc = $this->initDependencies();
+        if ($rc !== ExitCodes::SUCCESS)
+            return $rc;
 
         try {
-            do {
-                $token = $codeAnalyzer->getNextToken();
-                $tokenType = $token->getType();
-
-                if ($tokenType === Token::HEADER || $tokenType === Token::EOF) {
-                } else if ($tokenType === Token::OPCODE) {
-                    $processingInst = true;
-                    $xmlOutput->startInstruction($token->getData());
-                } else if ($tokenType === Token::EOL) {
-                    if ($processingInst)
-                        $xmlOutput->endInstruction();
-                } else {
-                    $xmlOutput->addArgument($codeAnalyzer->getArgumentOrder(), $tokenType, $token->getData());
-                }
-            } while ($token->getType() !== Token::EOF);
+            $this->parse();
         } catch (SourceCodeException $e) {
             fwrite(STDERR, $e->getMessage());
             return ExitCodes::ERROR_LEX_SYNT;
         }
 
-        $xmlOutput->endOutput();
+        fwrite($this->outputStream, $this->xmlOutput->getOutput());
 
-        echo $xmlOutput->getOutput();
+        $this->closeInputStream();
+        $this->closeOutputStream();
 
         return ExitCodes::SUCCESS;
     }
@@ -68,5 +57,89 @@ class ParserApp extends App
         echo '    php parse.php [OPTION]' . PHP_EOL;
         echo 'OPTIONS:' . PHP_EOL;
         echo '    -h, --help    Print this help' . PHP_EOL;
+    }
+
+    private function initDependencies() {
+        try {
+            $this->inputStream = $this->getInputStream();
+        } catch (Exception $e) {
+            fwrite(STDERR, $e->getMessage());
+            return ExitCodes::ERROR_OPENING_FILE_IN;
+        }
+
+        try {
+            $this->outputStream = $this->getOutputStream();
+        } catch (Exception $e) {
+            fwrite(STDERR, $e->getMessage());
+            return ExitCodes::ERROR_OPENING_FILE_OUT;
+        }
+
+        $lang = new IPPcode18();
+        $this->codeAnalyzer = new CodeAnalyzer($lang, $this->inputStream);
+        $this->xmlOutput = new XMLOutput();
+
+        return ExitCodes::SUCCESS;
+    }
+
+    private function getInputStream() {
+        $stream = STDIN;
+        $src = $this->getConfig('src');
+        if ($src !== false) {
+            $stream = fopen($src, 'r');
+
+            if ($stream === false) {
+                throw new Exception('Failed to open file: '.$src);
+            }
+        }
+
+        return $stream;
+    }
+
+    private function closeInputStream() {
+        if ($this->getConfig('src') !== false)
+            fclose($this->inputStream);
+    }
+
+    private function getOutputStream() {
+        $stream = STDOUT;
+        $out = $this->getConfig('out');
+        if ($out !== false) {
+            $stream = fopen($out, 'r');
+
+            if ($stream === false) {
+                throw new Exception('Failed to open file: '.$out);
+            }
+        }
+
+        return $stream;
+    }
+
+    private function closeOutputStream() {
+        if ($this->getConfig('out') !== false)
+            fclose($this->outputStream);
+    }
+
+    private function parse() {
+        $this->xmlOutput->startOutput();
+        $token = null;
+        $processingInst = false;
+
+        do {
+            $token = $this->codeAnalyzer->getNextToken();
+            $tokenType = $token->getType();
+
+            if ($tokenType === Token::HEADER || $tokenType === Token::EOF) {
+            } else if ($tokenType === Token::OPCODE) {
+                $processingInst = true;
+                $this->xmlOutput->startInstruction($token->getData());
+            } else if ($tokenType === Token::EOL) {
+                if ($processingInst)
+                    $this->xmlOutput->endInstruction();
+            } else {
+                $this->xmlOutput->addArgument($this->codeAnalyzer->getArgumentOrder(), $tokenType, $token->getData());
+            }
+        } while ($token->getType() !== Token::EOF);
+
+        $this->xmlOutput->endOutput();
     }
 }
