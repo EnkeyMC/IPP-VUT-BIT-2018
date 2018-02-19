@@ -54,9 +54,14 @@ class ParserApp extends App
         echo 'Parse source code in programming language IPPcode18 from standard input and output it to standard output as XML for further interpretation' . PHP_EOL;
         echo PHP_EOL;
         echo 'USAGE:' . PHP_EOL;
-        echo '    php parse.php [OPTION]' . PHP_EOL;
+        echo '    php parse.php [OPTIONS]' . PHP_EOL;
         echo 'OPTIONS:' . PHP_EOL;
-        echo '    -h, --help    Print this help' . PHP_EOL;
+        echo '    -h, --help          Print this help' . PHP_EOL;
+        echo '    -s, --src <file>    Specify source file' . PHP_EOL;
+        echo '    -o, --out <file>    Specify output file' . PHP_EOL;
+        echo '        --stats <file>  Specify file for code statistics' . PHP_EOL;
+        echo '    -l, --loc           Print number of line of code to file specified in --stats' . PHP_EOL;
+        echo '    -c, --comments      Print number of comments to file specified in --stats' . PHP_EOL;
     }
 
     private function initDependencies() {
