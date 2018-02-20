@@ -188,4 +188,43 @@ class CodeAnalyzerTest extends TestCase {
     private function assertNextToken($type, $data=null) {
         $this->assertEquals(new Token($type, $data), $this->codeAnalyzer->getNextToken());
     }
+
+    public function testOnComment() {
+        $listener = new EventListenerDummy();
+        $this->codeAnalyzer->attach($listener);
+        $this->codeAnalyzer->setContext(CodeAnalyzer::CONTEXT_INSTRUCTION);
+
+        $this->writeInputStream('# new var');
+        $this->resetStream();
+
+        $this->codeAnalyzer->getNextToken();
+
+        $this->assertSame(CodeAnalyzer::EVENT_ON_COMMENT, $listener->lastEvent);
+    }
+
+    public function testOnEmptyComment() {
+        $listener = new EventListenerDummy();
+        $this->codeAnalyzer->attach($listener);
+
+        $this->writeInputStream('.IPPcode18 #');
+        $this->resetStream();
+
+        $this->codeAnalyzer->getNextToken();
+
+        $this->assertSame(CodeAnalyzer::EVENT_ON_COMMENT, $listener->lastEvent);
+    }
+
+    public function testNoComment() {
+        $listener = new EventListenerDummy();
+        $this->codeAnalyzer->attach($listener);
+
+        $this->writeInputStream('.IPPcode18  ');
+        $this->resetStream();
+
+        $this->codeAnalyzer->getNextToken();
+
+        $this->assertNotSame(CodeAnalyzer::EVENT_ON_COMMENT, $listener->lastEvent);
+    }
+
+    // TODO test LOCs
 }

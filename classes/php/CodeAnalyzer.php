@@ -1,7 +1,10 @@
 <?php
 
-final class CodeAnalyzer {
+final class CodeAnalyzer extends EventTrigger {
     const CONTEXT_INSTRUCTION = 'inst';
+
+    const EVENT_ON_COMMENT = 'onComment';
+    const EVENT_ON_LOC = 'onLOC';
 
     /** @var AddressCodeLang  */
     private $lang;
@@ -75,6 +78,7 @@ final class CodeAnalyzer {
                 $this->argN = 0;
                 $opcodeToken = $this->lang->getOpcodeToken($opcode);
                 $this->setContext($opcodeToken->getData());
+                $this->notify(self::EVENT_ON_LOC);
                 return $opcodeToken;
             } else {
                 throw new LexicalErrorException($this->getErrorMsg('opcode', $opcode));
@@ -111,6 +115,8 @@ final class CodeAnalyzer {
 
     private function stripComments($string) {
         $arr = explode($this->lang->getCommentSeparator(), $string, 2);
+        if ($arr[0] !== $string)
+            $this->notify(self::EVENT_ON_COMMENT);
         return $arr[0];
     }
 

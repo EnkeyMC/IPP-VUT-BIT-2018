@@ -19,6 +19,8 @@ class ParserApp extends App
     private $codeAnalyzer;
     /** @var  XMLOutput */
     private $xmlOutput;
+    /** @var  StatisticsCollector */
+    private $statsCollector;
 
     public function run() {
         if ($this->getConfig('help')) {
@@ -82,6 +84,9 @@ class ParserApp extends App
         $lang = new IPPcode18();
         $this->codeAnalyzer = new CodeAnalyzer($lang, $this->inputStream);
         $this->xmlOutput = new XMLOutput();
+
+        $this->statsCollector = new StatisticsCollector();
+        $this->codeAnalyzer->attach($this->statsCollector);
 
         return ExitCodes::SUCCESS;
     }
