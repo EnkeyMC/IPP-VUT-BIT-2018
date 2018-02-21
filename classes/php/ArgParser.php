@@ -2,7 +2,7 @@
 
 final class ArgParser {
 
-    const OPTION_REGEX = '/^(?:-([a-zA-Z0-9])|--([a-zA-Z0-9]+))(?:=(.*))?$/';
+    const OPTION_REGEX = '/^(?:-([a-zA-Z0-9])|--([a-zA-Z0-9][a-zA-Z0-9\-]+))(?:=(.*))?$/';
 
     private $options;
 

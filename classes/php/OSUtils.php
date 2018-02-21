@@ -24,6 +24,7 @@ final class OSUtils {
     );
 
     private static $instance = null;
+    /** @var string Operating system name */
     private $os;
 
     /**
@@ -36,7 +37,7 @@ final class OSUtils {
     /**
      * Determine which OS PHP is running on
      *
-     * @return OSUtils::OS_WIN or OSUtils::OS_UNIX
+     * @return string OSUtils::OS_WIN or OSUtils::OS_UNIX
      */
     private function determineOsType() {
         // Not very good determination, but it'll do
@@ -73,5 +74,24 @@ final class OSUtils {
         }
 
         return $cmd;
+    }
+
+    public static function getFilesInDirByRegex($directory, $regex, $recursive=false) {
+        if ($recursive) {
+            $directoryIterator = new RecursiveDirectoryIterator($directory);
+            $iterator = new RecursiveIteratorIterator($directoryIterator);
+        } else {
+            $directoryIterator = new DirectoryIterator($directory);
+            $iterator = new IteratorIterator($directoryIterator);
+        }
+
+        $regexIterator = new RegexIterator($iterator, $regex, RegexIterator::GET_MATCH);
+
+        $files = array();
+        foreach ($regexIterator as $file) {
+            $files[] = $file[0];
+        }
+
+        return $files;
     }
 }

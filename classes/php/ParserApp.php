@@ -23,7 +23,6 @@ class ParserApp extends App
     private $statsCollector;
 
     public function run() {
-
         if ($this->getConfig('help')) {
             $this->printHelp();
             return ExitCodes::SUCCESS;
