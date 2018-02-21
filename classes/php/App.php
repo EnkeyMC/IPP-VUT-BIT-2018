@@ -14,7 +14,7 @@ abstract class App
         return self::$instance;
     }
 
-    private function __construct() {
+    protected function __construct() {
         $this->loadConfiguration();
     }
 

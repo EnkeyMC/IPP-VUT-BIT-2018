@@ -23,6 +23,7 @@ class ParserApp extends App
     private $statsCollector;
 
     public function run() {
+
         if ($this->getConfig('help')) {
             $this->printHelp();
             return ExitCodes::SUCCESS;
@@ -44,26 +45,34 @@ class ParserApp extends App
         $this->closeInputStream();
         $this->closeOutputStream();
 
+        $this->outputStatistics();
+
         return ExitCodes::SUCCESS;
     }
 
     protected function loadConfiguration() {
         $argParser = new ArgParser(self::OPTIONS);
         $this->configuration = $argParser->parseArguments();
+        $this->checkArguments();
+    }
+
+    private function checkArguments() {
+        //var_dump($this->configuration);
+        // TODO
     }
 
     private function printHelp() {
-        echo 'Parse source code in programming language IPPcode18 from standard input and output it to standard output as XML for further interpretation' . PHP_EOL;
+        echo 'Prevede zdrojovy kod v jazyce IPPcode18 do XML reprezentace' . PHP_EOL;
         echo PHP_EOL;
-        echo 'USAGE:' . PHP_EOL;
-        echo '    php parse.php [OPTIONS]' . PHP_EOL;
-        echo 'OPTIONS:' . PHP_EOL;
-        echo '    -h, --help          Print this help' . PHP_EOL;
-        echo '    -s, --src <file>    Specify source file' . PHP_EOL;
-        echo '    -o, --out <file>    Specify output file' . PHP_EOL;
-        echo '        --stats <file>  Specify file for code statistics' . PHP_EOL;
-        echo '    -l, --loc           Print number of line of code to file specified in --stats' . PHP_EOL;
-        echo '    -c, --comments      Print number of comments to file specified in --stats' . PHP_EOL;
+        echo 'POUZITI:' . PHP_EOL;
+        echo '    php parse.php [MOZNOSTI]' . PHP_EOL;
+        echo 'MOZNOSTI:' . PHP_EOL;
+        echo '    -h, --help            Vypise tuto napovedu' . PHP_EOL;
+        echo '    -s, --src <soubor>    Urci vstupni soubor skriptu (vychozi STDIN)' . PHP_EOL;
+        echo '    -o, --out <soubor>    Urci vystupni soubor skriptu (vychozi STDOUT)' . PHP_EOL;
+        echo '        --stats <soubor>  Zapne sbirani statistik do zadaneho souboru' . PHP_EOL;
+        echo '    -l, --loc             V pripade pouziti moznosti --stats zapne vypis statistiky radku kodu' . PHP_EOL;
+        echo '    -c, --comments        V pripade pouziti moznosti --stats zapne vypis statistiky komentaru' . PHP_EOL;
     }
 
     private function initDependencies() {
@@ -161,7 +170,19 @@ class ParserApp extends App
                 throw new OpenStreamException('Failed to open file: '.$statsFile);
             }
 
-            // TODO
+            if ($this->isOptionInOrder('loc', 'comments')) {
+                if ($this->getConfig('loc'))
+                    fwrite($stream, $this->statsCollector->getLOCStatistics().PHP_EOL);
+                if ($this->getConfig('comments'))
+                    fwrite($stream, $this->statsCollector->getCommentStatistics().PHP_EOL);
+            } else {
+                if ($this->getConfig('comments'))
+                    fwrite($stream, $this->statsCollector->getCommentStatistics().PHP_EOL);
+                if ($this->getConfig('loc'))
+                    fwrite($stream, $this->statsCollector->getLOCStatistics().PHP_EOL);
+            }
+
+            fclose($stream);
         }
     }
 
@@ -172,5 +193,7 @@ class ParserApp extends App
             if ($option === $second)
                 return false;
         }
+
+        return true;
     }
 }

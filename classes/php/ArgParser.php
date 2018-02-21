@@ -2,10 +2,9 @@
 
 final class ArgParser {
 
+    const OPTION_REGEX = '/^(?:-([a-zA-Z0-9])|--([a-zA-Z0-9]+))(?:=(.*))?$/';
+
     private $options;
-
-    public $mockGetoptResult = NULL;  // Just for testing
-
 
     public function __construct($options) {
         $this->options = $options;
@@ -41,10 +40,30 @@ final class ArgParser {
     }
 
     private function getOpt($shortOpts, $longOpts) {
-        if ($this->mockGetoptResult) {
-            return $this->mockGetoptResult;
+
+        global $argv;
+        unset($argv[0]);  // Remove script
+        $result = array();
+        $match = array();
+
+        foreach ($argv as $arg) {
+            if (preg_match(self::OPTION_REGEX, $arg, $match)) {
+                unset($match[0]);
+                $match = array_filter($match);
+                $option = false;
+                foreach($match as $group) {
+                    if ($option)
+                        $result[$option] = $group;
+                    else {
+                        $result[$group] = false;
+                        $option = $group;
+                    }
+                }
+            } else {
+                throw new InvalidArgumentException('Invalid argument "'.$arg.'"');
+            }
         }
-        return getopt($shortOpts, $longOpts);
+        return $result;
     }
 
     private function mergeArguments(array $arguments) {

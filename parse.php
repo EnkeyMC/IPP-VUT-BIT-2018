@@ -2,5 +2,10 @@
 
 require_once 'autoload.php';
 
-$parser = ParserApp::getInstance();
+try {
+    $parser = ParserApp::getInstance();
+} catch (InvalidArgumentException $e) {
+    fwrite(STDERR, $e->getMessage());
+    exit(ExitCodes::ERROR_PARAMETER);
+}
 exit($parser->run());
