@@ -69,14 +69,14 @@ class ParserApp extends App
     private function initDependencies() {
         try {
             $this->inputStream = $this->getInputStream();
-        } catch (Exception $e) {
+        } catch (OpenStreamException $e) {
             fwrite(STDERR, $e->getMessage());
             return ExitCodes::ERROR_OPENING_FILE_IN;
         }
 
         try {
             $this->outputStream = $this->getOutputStream();
-        } catch (Exception $e) {
+        } catch (OpenStreamException $e) {
             fwrite(STDERR, $e->getMessage());
             return ExitCodes::ERROR_OPENING_FILE_OUT;
         }
@@ -98,7 +98,7 @@ class ParserApp extends App
             $stream = fopen($src, 'r');
 
             if ($stream === false) {
-                throw new Exception('Failed to open file: '.$src);
+                throw new OpenStreamException('Failed to open file: '.$src);
             }
         }
 
@@ -117,7 +117,7 @@ class ParserApp extends App
             $stream = fopen($out, 'r');
 
             if ($stream === false) {
-                throw new Exception('Failed to open file: '.$out);
+                throw new OpenStreamException('Failed to open file: '.$out);
             }
         }
 
@@ -151,5 +151,26 @@ class ParserApp extends App
         } while ($token->getType() !== Token::EOF);
 
         $this->xmlOutput->endOutput();
+    }
+
+    private function outputStatistics() {
+        $statsFile = $this->getConfig('stats');
+        if ($statsFile !== false) {
+            $stream = fopen($statsFile, 'w');
+            if ($stream === false) {
+                throw new OpenStreamException('Failed to open file: '.$statsFile);
+            }
+
+            // TODO
+        }
+    }
+
+    private function isOptionInOrder($first, $second) {
+        foreach($this->configuration as $option => $value) {
+            if ($option === $first)
+                return true;
+            if ($option === $second)
+                return false;
+        }
     }
 }
