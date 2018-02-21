@@ -57,8 +57,10 @@ class ParserApp extends App
     }
 
     private function checkArguments() {
-        //var_dump($this->configuration);
-        // TODO
+        if ($this->getConfig('help') && sizeof($this->configuration) > 1)
+            throw new InvalidArgumentException('No other option can be used with option "help"');
+        if (($this->getConfig('loc') || $this->getConfig('comments')) && $this->getConfig('stats') === false)
+            throw new InvalidArgumentException('Option "loc" or "comments" cannot be used without option "stats"');
     }
 
     private function printHelp() {
