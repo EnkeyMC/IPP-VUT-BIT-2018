@@ -11,19 +11,16 @@ final class ArgParser {
     }
 
     public function parseArguments() {
-        $shortOpts = $this->getShortOpts();
-        $longOpts = $this->getLongOpts();
-
-        $arguments = $this->getOpt($shortOpts, $longOpts);
-
+        $arguments = $this->getOpt();
+        $this->validateArguments($arguments);
         return $this->mergeArguments($arguments);
     }
 
     private function getShortOpts() {
-        $shortOpts = '';
+        $shortOpts = array();
 
         foreach($this->options as $longOpt => $shortOpt) {
-            $shortOpts .= $shortOpt;
+            $shortOpts[] = $shortOpt;
         }
 
         return $shortOpts;
@@ -39,8 +36,7 @@ final class ArgParser {
         return $longOpts;
     }
 
-    private function getOpt($shortOpts, $longOpts) {
-
+    private function getOpt() {
         global $argv;
         unset($argv[0]);  // Remove script
         $result = array();
@@ -63,6 +59,7 @@ final class ArgParser {
                 throw new InvalidArgumentException('Invalid argument "'.$arg.'"');
             }
         }
+
         return $result;
     }
 
@@ -84,14 +81,44 @@ final class ArgParser {
 
     private function getLongOptFromShortOpt($option) {
         foreach ($this->options as $longOpt => $shortOpt) {
-            if (self::stripColons($shortOpt) == $option)
-                return self::stripColons($longOpt);
+            if ($this->stripColons($shortOpt) == $option)
+                return $this->stripColons($longOpt);
         }
 
         return null;
     }
 
-    private static function stripColons($option) {
+    private function stripColons($option) {
         return trim($option, ':');
+    }
+
+    private function validateArguments(array $arguments) {
+        $validOptions = $this->getLongOpts();
+        $validOptions = array_merge($validOptions, $this->getShortOpts());
+        $validOptions = array_map([$this, 'stripColons'], $validOptions);
+
+
+        foreach ($arguments as $arg => $value) {
+            if (!in_array($arg, $validOptions))
+                throw new InvalidArgumentException('Invalid argument "'.$arg.'"');
+            if (!$this->isArgValueValid($arg, $value))
+                throw new InvalidArgumentException('Invalid argument "'.$arg.'"');
+        }
+    }
+
+    private function isArgValueValid($arg, $value) {
+        foreach ($this->options as $long => $short) {
+            if ($this->stripColons($long) === $arg || $this->stripColons($short) === $arg) {
+                $colons = strstr($long, ':');
+                if ($colons === ':') {
+                    return $value !== false;
+                } else if ($colons === '::') {
+                    return true;
+                } else {
+                    return $value === false;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -68,6 +68,16 @@ class ArgParserTest extends TestCase {
         $dummy->parseArguments();
     }
 
+    public function testOptionalValueMissing() {
+        $dummy = new ArgParser(['opt::' => '']);
+        $this->mockArgv(['--opt']);
+
+        $this->assertSame(
+            ['opt' => false],
+            $dummy->parseArguments()
+        );
+    }
+
     private function mockArgv(array $args) {
         global $argv;
 
