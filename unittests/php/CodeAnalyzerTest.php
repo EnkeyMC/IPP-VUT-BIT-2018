@@ -153,6 +153,20 @@ class CodeAnalyzerTest extends TestCase {
         $this->codeAnalyzer->getNextToken();
     }
 
+    public function testTooFewArgs() {
+        $this->writeInputStream('MUL GF@var int@4');
+        $this->resetStream();
+
+        $this->codeAnalyzer->setContext(CodeAnalyzer::CONTEXT_INSTRUCTION);
+
+        $this->assertNextToken(Token::OPCODE, 'MUL');
+        $this->assertNextToken(Token::ARG_VAR, 'GF@var');
+        $this->assertNextToken(Token::ARG_INT, '4');
+
+        $this->expectException(SyntaxErrorException::class);
+        $this->codeAnalyzer->getNextToken();
+    }
+
     public function testSimpleProgram() {
         $this->writeInputStream('.IPPcode18'.PHP_EOL);
         $this->writeInputStream(PHP_EOL);
@@ -226,5 +240,29 @@ class CodeAnalyzerTest extends TestCase {
         $this->assertNotSame(CodeAnalyzer::EVENT_ON_COMMENT, $listener->lastEvent);
     }
 
-    // TODO test LOCs
+    public function testLOC() {
+        $listener = new EventListenerDummy();
+        $this->codeAnalyzer->attach($listener);
+        $this->codeAnalyzer->setContext(CodeAnalyzer::CONTEXT_INSTRUCTION);
+
+        $this->writeInputStream('defvar GF@var');
+        $this->resetStream();
+
+        $this->codeAnalyzer->getNextToken();
+
+        $this->assertSame(CodeAnalyzer::EVENT_ON_LOC, $listener->lastEvent);
+    }
+
+    public function testNoLOC() {
+        $listener = new EventListenerDummy();
+        $this->codeAnalyzer->attach($listener);
+        $this->codeAnalyzer->setContext(CodeAnalyzer::CONTEXT_INSTRUCTION);
+
+        $this->writeInputStream('  ');
+        $this->resetStream();
+
+        $this->codeAnalyzer->getNextToken();
+
+        $this->assertNotSame(CodeAnalyzer::EVENT_ON_LOC, $listener->lastEvent);
+    }
 }
