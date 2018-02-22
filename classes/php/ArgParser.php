@@ -56,7 +56,7 @@ final class ArgParser {
                     }
                 }
             } else {
-                throw new InvalidArgumentException('Invalid argument "'.$arg.'"');
+                throw $this->getArgumentException($arg);
             }
         }
 
@@ -100,9 +100,9 @@ final class ArgParser {
 
         foreach ($arguments as $arg => $value) {
             if (!in_array($arg, $validOptions))
-                throw new InvalidArgumentException('Invalid argument "'.$arg.'"');
+                throw $this->getArgumentException($arg);
             if (!$this->isArgValueValid($arg, $value))
-                throw new InvalidArgumentException('Invalid argument "'.$arg.'"');
+                throw $this->getArgumentException($arg);
         }
     }
 
@@ -120,5 +120,9 @@ final class ArgParser {
             }
         }
         return false;
+    }
+
+    private function getArgumentException($arg) {
+        return new InvalidArgumentException('Invalid argument "'.$arg.'"', ExitCodes::ERROR_PARAMETER);
     }
 }

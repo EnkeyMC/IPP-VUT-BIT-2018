@@ -6,6 +6,6 @@ try {
     $tester = \TestSuite\TesterApp::getInstance();
 } catch (InvalidArgumentException $e) {
     fwrite(STDERR, $e->getMessage());
-    exit(ExitCodes::ERROR_PARAMETER);
+    exit($e->getCode());
 }
 exit($tester->run());

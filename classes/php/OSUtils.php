@@ -3,7 +3,7 @@
 /**
  * OSUtils
  *
- * Abstracts OS specific commands
+ * Abstracts OS functions
  */
 final class OSUtils {
     const OS_WIN = 'Windows';
@@ -49,7 +49,10 @@ final class OSUtils {
     }
 
     private function getOSSpecificCommand($cmd) {
-        return self::OS_COMMANDS[$this->os][$cmd];
+        if (array_key_exists($cmd, self::OS_COMMANDS[$this->os]))
+            return self::OS_COMMANDS[$this->os][$cmd];
+        else
+            return $cmd;
     }
 
     public static function getInstance() {
@@ -59,19 +62,19 @@ final class OSUtils {
     }
 
     public static function checkFileDifference($filename1, $filename2) {
-        $output = array();
-        $rc = 0;
-
-        exec(self::buildCommand(self::CMD_DIFF, [$filename1, $filename2]), $output, $rc);
-
-        return ['output' => $output, 'return_code' => $rc];
+        return self::runCommand(self::CMD_DIFF, [$filename1, $filename2]);
     }
 
-    private static function buildCommand($cmd, array $args) {
+    private static function buildCommand($cmd, array $args, $inputRedir='', $outputRedir='') {
         $cmd = self::getInstance()->getOSSpecificCommand($cmd);
         foreach ($args as $arg) {
             $cmd .= ' ' . $arg;
         }
+
+        if ($inputRedir)
+            $cmd .= ' < '.$inputRedir;
+        if ($outputRedir)
+            $cmd .= ' > '.$outputRedir;
 
         return $cmd;
     }
@@ -87,11 +90,19 @@ final class OSUtils {
 
         $regexIterator = new RegexIterator($iterator, $regex, RegexIterator::GET_MATCH);
 
-        $files = array();
-        foreach ($regexIterator as $file) {
-            $files[] = $file[0];
-        }
+        return $regexIterator;
+    }
 
-        return $files;
+    public static function changeFileExtension($filePath, $newExtension) {
+        return preg_replace('/(?<=\.)[^\.\\\\\/]+$/', $newExtension, $filePath);
+    }
+
+    public static function runCommand($cmd, array $args, $inputRedir='', $outputRedir='') {
+        $output = array();
+        $rc = 0;
+
+        exec(self::buildCommand($cmd, $args, $inputRedir, $outputRedir), $output, $rc);
+
+        return ['output' => $output, 'return_code' => $rc];
     }
 }

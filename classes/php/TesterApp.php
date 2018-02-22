@@ -10,7 +10,10 @@ class TesterApp extends \App
         'directory:' => 'd:',
         'recursive' => 'r',
         'parse-script:' => 'p:',
-        'int-script:' => 'i:'
+        'int-script:' => 'i:',
+        'php-int:' => '',
+        'py-int:' => '',
+        'temp-dir:' => 't:'
     ];
 
     public function run()
@@ -20,7 +23,13 @@ class TesterApp extends \App
             return \ExitCodes::SUCCESS;
         }
 
-        var_dump(\OSUtils::getFilesInDirByRegex('tests/', '/.+\.src$/i', true));
+        $sources = \OSUtils::getFilesInDirByRegex('tests/', '/.+\.src$/i', true);
+
+        foreach ($sources as $source) {
+            $testCase = new TestCase($source[0]);
+            $testCase->run();
+        }
+        return 0;
     }
 
     protected function loadConfiguration()
@@ -42,6 +51,12 @@ class TesterApp extends \App
             $this->configuration['parse-script'] = 'parse.php';
         if ($this->getConfig('int-script') === false)
             $this->configuration['int-script'] = 'interpret.py';
+        if ($this->getConfig('php-int') === false)
+            $this->configuration['php-int'] = 'php5.6';
+        if ($this->getConfig('py-int') === false)
+            $this->configuration['py-int'] = 'python3.6';
+        if ($this->getConfig('temp-dir') === false)
+            $this->configuration['temp-dir'] = '.';
     }
 
     private function printHelp() {
@@ -53,7 +68,10 @@ class TesterApp extends \App
         echo '    -h, --help                   Vypise tuto napovedu' . PHP_EOL;
         echo '    -d, --directory <adresar>    Testy bude hledat v zadanem adresari (chybi-li tento parametr, tak skript prochazi aktualni adresar)' . PHP_EOL;
         echo '    -r, --recursive              Testy bude hledat i v podadresarich' . PHP_EOL;
-        echo '    -p  --parse-script <soubor>  Soubor se skriptem v PHP 5.6 pro analyzu zdrojoveho kodu (vychozi parse.php v aktualnim adresari)' . PHP_EOL;
-        echo '    -i, --int-script <soubor>    Soubor se skriptem v Python 3.6 pro interpretaci XML reprezentace kodu IPPcode18 (vychozi interpret.py v aktualnim adresari)' . PHP_EOL;
+        echo '    -p  --parse-script <soubor>  Soubor se skriptem v PHP pro analyzu zdrojoveho kodu (vychozi parse.php v aktualnim adresari)' . PHP_EOL;
+        echo '    -i, --int-script <soubor>    Soubor se skriptem v Python pro interpretaci XML reprezentace kodu IPPcode18 (vychozi interpret.py v aktualnim adresari)' . PHP_EOL;
+        echo '        --php-int <interpret>    Pouzije zadany interpret PHP (vychozi "php5.6")' . PHP_EOL;
+        echo '        --py-int <interpret>     Pouzije zadany interpret Pythonu (vychozi "python3.6")' . PHP_EOL;
+        echo '    -t, --temp-dir <adresar>     Pouzije zadany adresar pro docasne soubory, adresar musi existovat (vychozi je aktualni adresar)' . PHP_EOL;
     }
 }
