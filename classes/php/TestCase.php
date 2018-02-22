@@ -14,7 +14,7 @@ class TestCase
         self::FILE_SRC => ['extension' => 'src', 'default' => ''],
         self::FILE_IN => ['extension' => 'in', 'default' => ''],
         self::FILE_OUT => ['extension' => 'out', 'default' => ''],
-        self::FILE_RC => ['extension' => 'rc', 'default' => '0']
+        self::FILE_RC => ['extension' => 'rc', 'default' => \ExitCodes::SUCCESS]
     ];
 
     private $filePaths = [
@@ -32,8 +32,14 @@ class TestCase
     }
 
     public function run() {
+        $parseOutputFile = $this->testParse();
+        $this->testInterpret($parseOutputFile);
+        unlink($parseOutputFile);
+    }
+
+    private function testParse() {
         $app = TesterApp::getInstance();
-        $tmpFlie = tempnam($app->getConfig('temp-dir'), 'xml');
+        $tmpFlie = $this->getTmpFileName();
         $result = \OSUtils::runCommand(
             $app->getConfig('php-int'),
             [$app->getConfig('parse-script')],
@@ -41,7 +47,43 @@ class TestCase
             $tmpFlie
         );
 
+        if ($result['return_code'] != \ExitCodes::SUCCESS) {
+            $expectedRC = $this->getReturnCode();
+            if ($expectedRC != $result['return_code'])
+                fwrite(STDERR, 'Expected: '.$expectedRC.', got: '.$result['return_code']); // TODO something better
+        }
 
+        return $tmpFlie;
+    }
+
+    private function testInterpret($sourceFile) {
+        $app = TesterApp::getInstance();
+        $tmpFile = $this->getTmpFileName();
+        $result = \OSUtils::runCommand(
+            $app->getConfig('py-int'),
+            [$app->getConfig('int-script'), '--source="'.$sourceFile.'"'],
+            $this->filePaths[self::FILE_IN],
+            $tmpFile
+        );
+
+        $expectedRC = $this->getReturnCode();
+        if ($expectedRC != $result['return_code'])
+            fwrite(STDERR, 'RC ERROR'); // TODO better
+
+        if ($expectedRC == \ExitCodes::SUCCESS) {
+            $result = \OSUtils::checkFileDifference($this->filePaths[self::FILE_OUT], $tmpFile);
+            var_dump($result);
+        }
+
+        unlink($tmpFile);
+    }
+
+    private function getReturnCode() {
+        return file_get_contents($this->filePaths[self::FILE_RC]);
+    }
+
+    private function getTmpFileName() {
+        return tempnam(TesterApp::getInstance()->getConfig('temp-dir'), 'test');
     }
 
     private function findReferenceFiles() {
