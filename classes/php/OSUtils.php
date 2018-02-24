@@ -94,7 +94,10 @@ final class OSUtils {
     }
 
     public static function changeFileExtension($filePath, $newExtension) {
-        return preg_replace('/(?<=\.)[^\.\\\\\/]+$/', $newExtension, $filePath);
+        $new = preg_replace('/(?<=\.)[^\.\\\\\/]+$/', $newExtension, $filePath);
+        if ($newExtension === '')
+            $new = rtrim($new, '.');
+        return $new;
     }
 
     public static function runCommand($cmd, array $args, $inputRedir='', $outputRedir='') {
@@ -104,5 +107,9 @@ final class OSUtils {
         exec(self::buildCommand($cmd, $args, $inputRedir, $outputRedir), $output, $rc);
 
         return ['output' => $output, 'return_code' => $rc];
+    }
+
+    public static function normalizePath($path) {
+        return preg_replace('/\\\\/', '/', $path);
     }
 }

@@ -24,17 +24,37 @@ class TestCase
         self::FILE_RC => null
     ];
 
+    private $result;
+    private $finished;
+
     public function __construct($srcFilePath)
     {
         $this->filePaths[self::FILE_SRC] = $srcFilePath;
         $this->findReferenceFiles();
         $this->generateMissingFiles();
+        $this->finished = false;
+
+        $this->result = new TestResult($this->getName());
+    }
+
+    public function getName() {
+        $app = TesterApp::getInstance();
+        $name = str_replace(
+            \OSUtils::normalizePath($app->getConfig('directory')),
+            '',
+            \OSUtils::normalizePath($this->filePaths[self::FILE_SRC])
+        );
+
+        $name = \OSUtils::changeFileExtension($name, '');
+        return $name;
     }
 
     public function run() {
         $parseOutputFile = $this->testParse();
-        $this->testInterpret($parseOutputFile);
+        if (!$this->result->hasError() && !$this->finished)
+            $this->testInterpret($parseOutputFile);
         unlink($parseOutputFile);
+        return $this->result;
     }
 
     private function testParse() {
@@ -49,8 +69,14 @@ class TestCase
 
         if ($result['return_code'] != \ExitCodes::SUCCESS) {
             $expectedRC = $this->getReturnCode();
-            if ($expectedRC != $result['return_code'])
-                fwrite(STDERR, 'Expected: '.$expectedRC.', got: '.$result['return_code']); // TODO something better
+            if ($expectedRC != $result['return_code']) {
+                $this->result->error(
+                    TestResult::ERROR_PARSE_RETURN_CODE,
+                    ['expected' => $expectedRC, 'actual' => $result['return_code']]
+                );
+            }
+
+            $this->finished = true;
         }
 
         return $tmpFlie;
@@ -68,11 +94,15 @@ class TestCase
 
         $expectedRC = $this->getReturnCode();
         if ($expectedRC != $result['return_code'])
-            fwrite(STDERR, 'RC ERROR'); // TODO better
+            $this->result->error(
+                TestResult::ERROR_INT_RETURN_CODE,
+                ['expected' => $expectedRC, 'actual' => $result['return_code']]
+            );
 
         if ($expectedRC == \ExitCodes::SUCCESS) {
             $result = \OSUtils::checkFileDifference($this->filePaths[self::FILE_OUT], $tmpFile);
-            var_dump($result);
+            if ($result['return_code'] != 0)
+                $this->result->error(TestResult::ERROR_OUT_DIFF, ['diff' => implode(PHP_EOL, $result['output'])]);
         }
 
         unlink($tmpFile);

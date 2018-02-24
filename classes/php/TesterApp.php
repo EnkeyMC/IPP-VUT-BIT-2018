@@ -13,7 +13,8 @@ class TesterApp extends \App
         'int-script:' => 'i:',
         'php-int:' => '',
         'py-int:' => '',
-        'temp-dir:' => 't:'
+        'temp-dir:' => 't:',
+        'text' => ''
     ];
 
     public function run()
@@ -23,13 +24,21 @@ class TesterApp extends \App
             return \ExitCodes::SUCCESS;
         }
 
-        $sources = \OSUtils::getFilesInDirByRegex('tests/', '/.+\.src$/i', true);
+        if ($this->getConfig('text'))
+            $output = new TextTestOutput();
+        else
+            $output = new TextTestOutput();  // TODO change to html
+
+        $sources = \OSUtils::getFilesInDirByRegex($this->getConfig('directory'), '/.+\.src$/i', true);
 
         foreach ($sources as $source) {
             $testCase = new TestCase($source[0]);
-            $testCase->run();
+            $result = $testCase->run();
+            $output->addTestResult($result);
         }
-        return 0;
+
+        $output->renderOutput();
+        return 0; // TODO change
     }
 
     protected function loadConfiguration()
@@ -73,5 +82,6 @@ class TesterApp extends \App
         echo '        --php-int <interpret>    Pouzije zadany interpret PHP (vychozi "php5.6")' . PHP_EOL;
         echo '        --py-int <interpret>     Pouzije zadany interpret Pythonu (vychozi "python3.6")' . PHP_EOL;
         echo '    -t, --temp-dir <adresar>     Pouzije zadany adresar pro docasne soubory, adresar musi existovat (vychozi je aktualni adresar)' . PHP_EOL;
+        echo '        --text                   Vystup bude v jednoduche textove podobe' . PHP_EOL;
     }
 }
