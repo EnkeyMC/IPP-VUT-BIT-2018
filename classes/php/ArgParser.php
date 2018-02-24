@@ -1,21 +1,42 @@
 <?php
 
+/**
+ * Class ArgParser
+ *
+ * Parses command line arguments
+ */
 final class ArgParser {
 
+    /** Regular expresion used for option parsing */
     const OPTION_REGEX = '/^(?:-([a-zA-Z0-9])|--([a-zA-Z0-9][a-zA-Z0-9\-]+))(?:=(.*))?$/';
 
+    /** @var  array Valid options with long => short mapping */
     private $options;
 
+    /**
+     * ArgParser constructor.
+     * @param $options array Valid options with long => short mapping
+     */
     public function __construct($options) {
         $this->options = $options;
     }
 
+    /**
+     * Parse command line arguments
+     *
+     * @return array Parsed arguments
+     */
     public function parseArguments() {
         $arguments = $this->getOpt();
         $this->validateArguments($arguments);
         return $this->mergeArguments($arguments);
     }
 
+    /**
+     * Get short options
+     *
+     * @return array short options
+     */
     private function getShortOpts() {
         $shortOpts = array();
 
@@ -26,6 +47,11 @@ final class ArgParser {
         return $shortOpts;
     }
 
+    /**
+     * Get long options
+     *
+     * @return array long options
+     */
     private function getLongOpts() {
         $longOpts = array();
 
@@ -36,6 +62,11 @@ final class ArgParser {
         return $longOpts;
     }
 
+    /**
+     * Get command line arguments
+     *
+     * @return array command line arguments
+     */
     private function getOpt() {
         global $argv;
         unset($argv[0]);  // Remove script
@@ -63,6 +94,12 @@ final class ArgParser {
         return $result;
     }
 
+    /**
+     * Merge short forms into long option forms
+     *
+     * @param array $arguments command line arguments
+     * @return array Merged arguments
+     */
     private function mergeArguments(array $arguments) {
         $mergedArguments = array();
 
@@ -79,6 +116,12 @@ final class ArgParser {
         return $mergedArguments;
     }
 
+    /**
+     * Get long version of short option if possible, otherwise null
+     *
+     * @param $option string short or long option
+     * @return null|string long option
+     */
     private function getLongOptFromShortOpt($option) {
         foreach ($this->options as $longOpt => $shortOpt) {
             if ($this->stripColons($shortOpt) == $option)
@@ -88,10 +131,21 @@ final class ArgParser {
         return null;
     }
 
+    /**
+     * Remove leading or trailing colons from option
+     *
+     * @param $option string
+     * @return string option without leading or trailing colons
+     */
     private function stripColons($option) {
         return trim($option, ':');
     }
 
+    /**
+     * Check if parsed arguments are allowed or if they have required values
+     *
+     * @param array $arguments command line arguments
+     */
     private function validateArguments(array $arguments) {
         $validOptions = $this->getLongOpts();
         $validOptions = array_merge($validOptions, $this->getShortOpts());
@@ -106,6 +160,13 @@ final class ArgParser {
         }
     }
 
+    /**
+     * Check if argument has required value or no value if value is forbidden
+     *
+     * @param $arg string argument
+     * @param $value string argument value
+     * @return bool true if valid, false otherwise
+     */
     private function isArgValueValid($arg, $value) {
         foreach ($this->options as $long => $short) {
             if ($this->stripColons($long) === $arg || $this->stripColons($short) === $arg) {
@@ -122,6 +183,12 @@ final class ArgParser {
         return false;
     }
 
+    /**
+     * Get argument exception with message
+     *
+     * @param $arg string argument
+     * @return InvalidArgumentException
+     */
     private function getArgumentException($arg) {
         return new InvalidArgumentException('Invalid argument "'.$arg.'"', ExitCodes::ERROR_PARAMETER);
     }

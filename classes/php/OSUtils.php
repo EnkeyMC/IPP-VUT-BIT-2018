@@ -23,6 +23,7 @@ final class OSUtils {
         ]
     );
 
+    /** @var OSUtils singleton instance */
     private static $instance = null;
     /** @var string Operating system name */
     private $os;
@@ -48,6 +49,12 @@ final class OSUtils {
         }
     }
 
+    /**
+     * Get command specific for current OS if needed
+     *
+     * @param $cmd string command to translate
+     * @return string command
+     */
     private function getOSSpecificCommand($cmd) {
         if (array_key_exists($cmd, self::OS_COMMANDS[$this->os]))
             return self::OS_COMMANDS[$this->os][$cmd];
@@ -55,16 +62,37 @@ final class OSUtils {
             return $cmd;
     }
 
+    /**
+     * Get OSUtils singleton instance
+     *
+     * @return OSUtils instance
+     */
     public static function getInstance() {
         if (self::$instance === NULL)
             self::$instance = new OSUtils();
         return self::$instance;
     }
 
+    /**
+     * Check difference between two files
+     *
+     * @param $filename1 string first file
+     * @param $filename2 string second file
+     * @return array containing 'output' and 'return_code' keys
+     */
     public static function checkFileDifference($filename1, $filename2) {
         return self::runCommand(self::CMD_DIFF, [$filename1, $filename2]);
     }
 
+    /**
+     * Build command string from given arguments
+     *
+     * @param $cmd string command
+     * @param array $args command arguments
+     * @param string $inputRedir file to redirect to STDIN
+     * @param string $outputRedir file to redirect STDOUT to
+     * @return string built command
+     */
     private static function buildCommand($cmd, array $args, $inputRedir='', $outputRedir='') {
         $cmd = self::getInstance()->getOSSpecificCommand($cmd);
         foreach ($args as $arg) {
@@ -79,6 +107,14 @@ final class OSUtils {
         return $cmd;
     }
 
+    /**
+     * Get all files in given directory matching given regular expression
+     *
+     * @param $directory string directory to search in
+     * @param $regex string regular expression to match files with
+     * @param bool $recursive search files even in subdirectories
+     * @return RegexIterator iterator of files
+     */
     public static function getFilesInDirByRegex($directory, $regex, $recursive=false) {
         if ($recursive) {
             $directoryIterator = new RecursiveDirectoryIterator($directory);
@@ -93,6 +129,13 @@ final class OSUtils {
         return $regexIterator;
     }
 
+    /**
+     * Replaces file extension with a new one
+     *
+     * @param $filePath string
+     * @param $newExtension string
+     * @return string file path with new extension
+     */
     public static function changeFileExtension($filePath, $newExtension) {
         $new = preg_replace('/(?<=\.)[^\.\\\\\/]+$/', $newExtension, $filePath);
         if ($newExtension === '')
@@ -100,6 +143,15 @@ final class OSUtils {
         return $new;
     }
 
+    /**
+     * Run command
+     *
+     * @param $cmd string command
+     * @param array $args command arguments
+     * @param string $inputRedir file to redirect to STDIN
+     * @param string $outputRedir file to redirect STDOUT to
+     * @return array containing 'output' and 'return_code' keys
+     */
     public static function runCommand($cmd, array $args, $inputRedir='', $outputRedir='') {
         $output = array();
         $rc = 0;
@@ -109,6 +161,12 @@ final class OSUtils {
         return ['output' => $output, 'return_code' => $rc];
     }
 
+    /**
+     * Replaces all \ with /
+     *
+     * @param $path string
+     * @return string normalized path
+     */
     public static function normalizePath($path) {
         return preg_replace('/\\\\/', '/', $path);
     }

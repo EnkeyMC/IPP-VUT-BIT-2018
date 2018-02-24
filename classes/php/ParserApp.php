@@ -1,7 +1,13 @@
 <?php
 
+/**
+ * Class ParserApp
+ *
+ * App for parsing IPPcode18 and outputting XML representation
+ */
 class ParserApp extends App
 {
+    /** Valid command line options */
     const OPTIONS = [
         'help' => 'h',
         'src:' => 's:',
@@ -22,6 +28,11 @@ class ParserApp extends App
     /** @var  StatisticsCollector */
     private $statsCollector;
 
+    /**
+     * Run application
+     *
+     * @return int exit code
+     */
     public function run() {
         if ($this->getConfig('help')) {
             $this->printHelp();
@@ -49,12 +60,20 @@ class ParserApp extends App
         return ExitCodes::SUCCESS;
     }
 
+    /**
+     * Load application configuration
+     */
     protected function loadConfiguration() {
         $argParser = new ArgParser(self::OPTIONS);
         $this->configuration = $argParser->parseArguments();
         $this->checkArguments();
     }
 
+    /**
+     * Check argument combinations
+     *
+     * @throws InvalidArgumentException
+     */
     private function checkArguments() {
         if ($this->getConfig('help') && sizeof($this->configuration) > 1)
             throw new InvalidArgumentException('No other option can be used with option "help"');
@@ -62,6 +81,9 @@ class ParserApp extends App
             throw new InvalidArgumentException('Option "loc" or "comments" cannot be used without option "stats"');
     }
 
+    /**
+     * Print help
+     */
     private function printHelp() {
         echo 'Prevede zdrojovy kod v jazyce IPPcode18 do XML reprezentace' . PHP_EOL;
         echo PHP_EOL;
@@ -76,6 +98,11 @@ class ParserApp extends App
         echo '    -c, --comments        V pripade pouziti moznosti --stats zapne vypis statistiky komentaru' . PHP_EOL;
     }
 
+    /**
+     * Initialize dependencies and streams needed for parsing
+     *
+     * @return int exit code
+     */
     private function initDependencies() {
         try {
             $this->inputStream = $this->getInputStream();
@@ -101,6 +128,12 @@ class ParserApp extends App
         return ExitCodes::SUCCESS;
     }
 
+    /**
+     * Open input stream
+     *
+     * @return resource
+     * @throws OpenStreamException
+     */
     private function getInputStream() {
         $stream = STDIN;
         $src = $this->getConfig('src');
@@ -115,11 +148,20 @@ class ParserApp extends App
         return $stream;
     }
 
+    /**
+     * Close input stream
+     */
     private function closeInputStream() {
         if ($this->getConfig('src') !== false)
             fclose($this->inputStream);
     }
 
+    /**
+     * Open output stream
+     *
+     * @return resource
+     * @throws OpenStreamException
+     */
     private function getOutputStream() {
         $stream = STDOUT;
         $out = $this->getConfig('out');
@@ -134,11 +176,17 @@ class ParserApp extends App
         return $stream;
     }
 
+    /**
+     * Close output stream
+     */
     private function closeOutputStream() {
         if ($this->getConfig('out') !== false)
             fclose($this->outputStream);
     }
 
+    /**
+     * Parse source file
+     */
     private function parse() {
         $this->xmlOutput->startOutput();
         $token = null;
@@ -163,6 +211,11 @@ class ParserApp extends App
         $this->xmlOutput->endOutput();
     }
 
+    /**
+     * Output statistics if configured
+     *
+     * @throws OpenStreamException
+     */
     private function outputStatistics() {
         $statsFile = $this->getConfig('stats');
         if ($statsFile !== false) {
@@ -187,6 +240,13 @@ class ParserApp extends App
         }
     }
 
+    /**
+     * Check if command line options were given in certain order
+     *
+     * @param $first string
+     * @param $second string
+     * @return bool
+     */
     private function isOptionInOrder($first, $second) {
         foreach($this->configuration as $option => $value) {
             if ($option === $first)

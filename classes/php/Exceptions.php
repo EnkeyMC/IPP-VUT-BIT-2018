@@ -13,10 +13,3 @@ class InvalidAddressTypeException extends Exception {}
 class RegexErrorException extends Exception {}
 
 class OpenStreamException extends Exception {}
-
-// TestSuite exception
-class TestSuiteException extends Exception {}
-
-class WrongReturnCodeException extends TestSuiteException {}
-
-class ParseWrongReturnCodeException extends WrongReturnCodeException {}

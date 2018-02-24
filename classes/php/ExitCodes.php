@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class ExitCodes
+ *
+ * Specifies exit code constants
+ */
 class ExitCodes
 {
     const SUCCESS = 0;

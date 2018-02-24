@@ -1,12 +1,19 @@
 <?php
 
+/**
+ * Class CodeAnalyzer
+ *
+ * Performs lexical and syntactic analysis for language IPPcode18
+ */
 final class CodeAnalyzer extends EventTrigger {
+    /** Used in setContext() */
     const CONTEXT_INSTRUCTION = 'inst';
 
+    // Event constants
     const EVENT_ON_COMMENT = 'onComment';
     const EVENT_ON_LOC = 'onLOC';
 
-    /** @var AddressCodeLang  */
+    /** @var IPPcode18  */
     private $lang;
     /** @var  string current context */
     private $context;
@@ -19,7 +26,12 @@ final class CodeAnalyzer extends EventTrigger {
     /** @var int current argument number */
     private $argN;
 
-    public function __construct(AddressCodeLang $lang, $inputStream=STDIN)
+    /**
+     * CodeAnalyzer constructor.
+     * @param IPPcode18 $lang IPPcode18 instance
+     * @param resource $inputStream input stream to perform analysis on (default STDIN)
+     */
+    public function __construct(IPPcode18 $lang, $inputStream=STDIN)
     {
         $this->lang = $lang;
         $this->context = $lang->getInitialContext();
@@ -29,10 +41,21 @@ final class CodeAnalyzer extends EventTrigger {
         $this->argN = 0;
     }
 
+    /**
+     * Set analysis context
+     *
+     * @param $context string current instruction context or header
+     */
     public function setContext($context) {
         $this->context = $context;
     }
 
+    /**
+     * Get next analysed token
+     *
+     * @return Token
+     * @throws InvalidContextException
+     */
     public function getNextToken() {
         if ($this->context === $this->lang->getHeader())
             return $this->getHeaderToken();
@@ -44,10 +67,21 @@ final class CodeAnalyzer extends EventTrigger {
             throw new InvalidContextException();
     }
 
+    /**
+     * Get current argument order
+     *
+     * @return int argument order
+     */
     public function getArgumentOrder() {
         return $this->argN;
     }
 
+    /**
+     * Analyse header
+     *
+     * @return Token
+     * @throws LexicalErrorException
+     */
     private function getHeaderToken() {
         if (feof($this->inputStream))
             throw new LexicalErrorException($this->getErrorMsg($this->lang->getHeader(), 'EOF'));
@@ -63,6 +97,12 @@ final class CodeAnalyzer extends EventTrigger {
             throw new LexicalErrorException($this->getErrorMsg($this->lang->getHeader(), $line));
     }
 
+    /**
+     * Analyse operation code
+     *
+     * @return Token
+     * @throws LexicalErrorException
+     */
     private function getOpcodeToken() {
         if (feof($this->inputStream))
             return new Token(Token::EOF);
@@ -88,6 +128,12 @@ final class CodeAnalyzer extends EventTrigger {
         }
     }
 
+    /**
+     * Analyse argument
+     *
+     * @return Token
+     * @throws SyntaxErrorException
+     */
     private function getArgToken() {
         $this->argN++;
         $argType = $this->lang->getArgumentType($this->context, $this->argN);
@@ -100,19 +146,31 @@ final class CodeAnalyzer extends EventTrigger {
         } else if ($argType === null) {
             $this->setContext(self::CONTEXT_INSTRUCTION);
             return new Token(Token::EOL);
-        } else if ($this->lang->isValidAddress($argType, $this->arguments[$this->argN])) {
-            $argToken = $this->lang->getAddressToken($argType, $this->arguments[$this->argN]);
+        } else if ($this->lang->isValidArgument($argType, $this->arguments[$this->argN])) {
+            $argToken = $this->lang->getArgumentToken($argType, $this->arguments[$this->argN]);
             unset($this->arguments[$this->argN]);
             return $argToken;
         }
         throw new RuntimeException();
     }
 
+    /**
+     * Trim line from comments and spaces
+     *
+     * @param string $line
+     * @return string trimmed line
+     */
     private function trimLine($line) {
         $line = $this->stripComments($line);
         return trim($line);
     }
 
+    /**
+     * Remove comments from string
+     *
+     * @param string $string
+     * @return string
+     */
     private function stripComments($string) {
         $arr = explode($this->lang->getCommentSeparator(), $string, 2);
         if ($arr[0] !== $string)
@@ -120,6 +178,13 @@ final class CodeAnalyzer extends EventTrigger {
         return $arr[0];
     }
 
+    /**
+     * Get formatted error message
+     *
+     * @param $expected string
+     * @param $actual string
+     * @return string message
+     */
     private function getErrorMsg($expected, $actual) {
         return 'Error on line '.$this->lineNum.': Expected '.$expected.', got "'.$actual.'"".';
     }
