@@ -2,9 +2,17 @@
 
 namespace TestSuite;
 
-
+/**
+ * Class TesterApp
+ * @package TestSuite
+ *
+ * Singleton
+ *
+ * Searches for test files in given directory and tests parse and interpret script with them
+ */
 class TesterApp extends \App
 {
+    /** Allowed options and aliases */
     const OPTIONS = [
         'help' => 'h',
         'directory:' => 'd:',
@@ -17,6 +25,11 @@ class TesterApp extends \App
         'text' => ''
     ];
 
+    /**
+     * Run application
+     *
+     * @return int exit code
+     */
     public function run()
     {
         if ($this->getConfig('help')) {
@@ -41,6 +54,9 @@ class TesterApp extends \App
         return 0; // TODO change
     }
 
+    /**
+     * Load application configuration
+     */
     protected function loadConfiguration()
     {
         $argParser = new \ArgParser(self::OPTIONS);
@@ -49,10 +65,16 @@ class TesterApp extends \App
         $this->fillDefaultConfiguration();
     }
 
+    /**
+     * Check argument combinations
+     */
     private function checkArguments() {
         // TODO check arguments
     }
 
+    /**
+     * Fill unspecified options with default values
+     */
     private function fillDefaultConfiguration() {
         if ($this->getConfig('directory') === false)
             $this->configuration['directory'] = '.';
@@ -68,6 +90,9 @@ class TesterApp extends \App
             $this->configuration['temp-dir'] = '.';
     }
 
+    /**
+     * Print help
+     */
     private function printHelp() {
         echo 'Testovaci ramec pro testovani prekladace a interpretu jazyka IPPcode18.' . PHP_EOL;
         echo PHP_EOL;

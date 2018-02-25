@@ -2,17 +2,32 @@
 
 namespace TestSuite;
 
-
-class TextTestOutput extends TestOutput
+/**
+ * Class TextTestOutput
+ * @package TestSuite
+ *
+ * Displays test output in simple text form
+ */
+class TextTestOutput implements TestOutput
 {
+    /** @var array TestResult results */
     private $results;
+    /** @var  int number of succeeded tests */
     private $successCount;
 
+    /**
+     * TextTestOutput constructor.
+     */
     public function __construct()
     {
         $this->results = array();
     }
 
+    /**
+     * Add test result to output
+     *
+     * @param TestResult $result test result
+     */
     public function addTestResult(TestResult $result)
     {
         $this->results[] = $result;
@@ -20,6 +35,9 @@ class TextTestOutput extends TestOutput
             $this->successCount++;
     }
 
+    /**
+     * Render test output to STDOUT
+     */
     public function renderOutput() {
         foreach ($this->results as $result) {
             if ($result->hasError()) {

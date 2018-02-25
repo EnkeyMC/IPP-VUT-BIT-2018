@@ -2,14 +2,19 @@
 
 namespace TestSuite;
 
-
+/**
+ * Class TestCase
+ * @package TestSuite
+ */
 class TestCase
 {
+    // File types
     const FILE_SRC = 0;
     const FILE_IN = 1;
     const FILE_OUT = 2;
     const FILE_RC = 3;
 
+    /** Information about files (extension and default content) */
     const FILE_INFO = [
         self::FILE_SRC => ['extension' => 'src', 'default' => ''],
         self::FILE_IN => ['extension' => 'in', 'default' => ''],
@@ -17,6 +22,7 @@ class TestCase
         self::FILE_RC => ['extension' => 'rc', 'default' => \ExitCodes::SUCCESS]
     ];
 
+    /** @var array of file path for each file type */
     private $filePaths = [
         self::FILE_SRC => null,
         self::FILE_IN => null,
@@ -24,9 +30,15 @@ class TestCase
         self::FILE_RC => null
     ];
 
+    /** @var TestResult */
     private $result;
+    /** @var bool whether test is finished or not */
     private $finished;
 
+    /**
+     * TestCase constructor.
+     * @param $srcFilePath string path to source file
+     */
     public function __construct($srcFilePath)
     {
         $this->filePaths[self::FILE_SRC] = $srcFilePath;
@@ -37,6 +49,9 @@ class TestCase
         $this->result = new TestResult($this->getName());
     }
 
+    /**
+     * @return string test name
+     */
     public function getName() {
         $app = TesterApp::getInstance();
         $name = str_replace(
@@ -49,6 +64,11 @@ class TestCase
         return $name;
     }
 
+    /**
+     * Run test
+     *
+     * @return TestResult the result of the test
+     */
     public function run() {
         $parseOutputFile = $this->testParse();
         if (!$this->result->hasError() && !$this->finished)
@@ -57,6 +77,11 @@ class TestCase
         return $this->result;
     }
 
+    /**
+     * Test parse.php script
+     *
+     * @return string file path with parser output
+     */
     private function testParse() {
         $app = TesterApp::getInstance();
         $tmpFlie = $this->getTmpFileName();
@@ -82,6 +107,11 @@ class TestCase
         return $tmpFlie;
     }
 
+    /**
+     * Test IPPcode18 interpret
+     *
+     * @param $sourceFile string file path with XML representation of IPPcode18
+     */
     private function testInterpret($sourceFile) {
         $app = TesterApp::getInstance();
         $tmpFile = $this->getTmpFileName();
@@ -108,14 +138,25 @@ class TestCase
         unlink($tmpFile);
     }
 
+    /**
+     * Get expected return code from file
+     *
+     * @return string return code
+     */
     private function getReturnCode() {
         return file_get_contents($this->filePaths[self::FILE_RC]);
     }
 
+    /**
+     * @return string unique temporary file name
+     */
     private function getTmpFileName() {
         return tempnam(TesterApp::getInstance()->getConfig('temp-dir'), 'test');
     }
 
+    /**
+     * Find other test files
+     */
     private function findReferenceFiles() {
         foreach ($this->getReferenceFileTypes() as $fileType) {
             $filePath = \OSUtils::changeFileExtension($this->getSrcPath(), $this->getFileTypeExtension($fileType));
@@ -124,6 +165,9 @@ class TestCase
         }
     }
 
+    /**
+     * Generate missing test files (.rc, .in,...)
+     */
     private function generateMissingFiles() {
         foreach ($this->filePaths as $fileType => &$filePath) {
             if ($filePath === null) {
@@ -134,6 +178,13 @@ class TestCase
         }
     }
 
+    /**
+     * Generate file with content
+     *
+     * @param $filePath string file to create
+     * @param $content string file content to write
+     * @throws \OpenStreamException
+     */
     private function generateFile($filePath, $content) {
         $stream = fopen($filePath, 'w');
         if ($stream === false)
@@ -143,18 +194,40 @@ class TestCase
         fclose($stream);
     }
 
+    /**
+     * Get file types except .src
+     *
+     * @return array range of file types
+     */
     private function getReferenceFileTypes() {
         return range(self::FILE_IN, self::FILE_RC);
     }
 
+    /**
+     * Get file type extension (src, rc,...)
+     *
+     * @param $fileType int file type defined by constants (FILE_SRC, FILE_RC, ...)
+     * @return string extension without leading dot
+     */
     private function getFileTypeExtension($fileType) {
         return self::FILE_INFO[$fileType]['extension'];
     }
 
+    /**
+     * Get default content for given file type
+     *
+     * @param $fileType int file type defined by constants (FILE_SRC, FILE_RC, ...)
+     * @return string default content
+     */
     private function getFileTypeDefaultContent($fileType) {
         return self::FILE_INFO[$fileType]['default'];
     }
 
+    /**
+     * Get source file path
+     *
+     * @return string source file path
+     */
     private function getSrcPath() {
         return $this->filePaths[self::FILE_SRC];
     }

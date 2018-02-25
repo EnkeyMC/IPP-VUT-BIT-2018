@@ -30,9 +30,13 @@ final class XMLOutput
      */
     private $instructionOrder;
 
-    public function __construct(XMLWriter $writer = NULL)
+    /**
+     * XMLOutput constructor.
+     * @param XMLWriter|NULL $writer instance of XMLWriter or null to create new one
+     */
+    public function __construct(XMLWriter $writer = null)
     {
-        if ($writer === NULL)
+        if ($writer === null)
             $this->xw = new XMLWriter();
         else
             $this->xw = $writer;
@@ -40,6 +44,13 @@ final class XMLOutput
         $this->instructionOrder = 1;
     }
 
+    /**
+     * Initialize output
+     *
+     * Must to be called before adding anything to output
+     *
+     * endOutput() has to be called after output is finished
+     */
     public function startOutput() {
         $this->xw->openMemory();
         $this->xw->startDocument(self::XML_VERSION, self::XML_ENCODING);
@@ -48,15 +59,30 @@ final class XMLOutput
         $this->addAttribute(self::ATTR_LANGUAGE, self::LANGUAGE);
     }
 
+    /**
+     * End xml output
+     *
+     * Must be called before getOutput()
+     */
     public function endOutput() {
         $this->xw->endElement();
         $this->xw->endDocument();
     }
 
+    /**
+     * Get XML output string
+     *
+     * @return string XML
+     */
     public function getOutput() {
         return $this->xw->outputMemory();
     }
 
+    /**
+     * Start instruction element with given opcode
+     *
+     * @param $opcode string
+     */
     public function startInstruction($opcode) {
         $this->xw->startElement(self::EL_INSTRUCTION);
         $this->addAttribute(self::ATTR_ORDER, $this->instructionOrder);
@@ -65,10 +91,22 @@ final class XMLOutput
         $this->instructionOrder++;
     }
 
+    /**
+     * End current instruction
+     *
+     * startInstruction() must be called before
+     */
     public function endInstruction() {
         $this->xw->endElement();
     }
 
+    /**
+     * Add argument to current instruction
+     *
+     * @param $n int argument order
+     * @param $type string argument type
+     * @param $value string argument value
+     */
     public function addArgument($n, $type, $value) {
         $this->xw->startElement(self::EL_ARG . $n);
         $this->addAttribute(self::ATTR_TYPE, $type);
@@ -76,6 +114,12 @@ final class XMLOutput
         $this->xw->endElement();
     }
 
+    /**
+     * Add attribute to element
+     *
+     * @param $attribute string
+     * @param $text string value
+     */
     private function addAttribute($attribute, $text) {
         $this->xw->startAttribute($attribute);
         $this->xw->text($text);
