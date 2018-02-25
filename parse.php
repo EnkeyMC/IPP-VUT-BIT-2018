@@ -6,6 +6,6 @@ try {
     $parser = ParserApp::getInstance();
     exit($parser->run());
 } catch (Exception $e) {
-    fwrite(STDERR, $e->getMessage());
-    exit(ExitCodes::ERROR_PARAMETER);
+    fwrite(STDERR, $e->getMessage().PHP_EOL);
+    exit($e->getCode());
 }

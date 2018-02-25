@@ -127,11 +127,11 @@ class IPPcode18 {
     public function isValidArgument($argType, $arg)
     {
         if (!array_key_exists($argType, self::REGEX_LIST))
-            throw new InvalidAddressTypeException('Invalid address type given to IPPcode18::isValidAddress() ('.$argType.')');
+            throw new InvalidAddressTypeException('Invalid address type given to IPPcode18::isValidAddress() ('.$argType.')', ExitCodes::ERROR_INTERN);
 
         $rv = preg_match(self::REGEX_LIST[$argType], $arg);
         if ($rv === false)
-            throw new RegexErrorException('Error occured during matching of regex: ' . self::REGEX_LIST[$argType]);
+            throw new RegexErrorException('Error occured during matching of regex: ' . self::REGEX_LIST[$argType], ExitCodes::ERROR_INTERN);
 
         return $rv === 1 ? true : false;
     }

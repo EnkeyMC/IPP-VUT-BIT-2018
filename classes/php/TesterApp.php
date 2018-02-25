@@ -42,7 +42,7 @@ class TesterApp extends \App
         else
             $output = new TextTestOutput();  // TODO change to html
 
-        $sources = \OSUtils::getFilesInDirByRegex($this->getConfig('directory'), '/.+\.src$/i', true);
+        $sources = \OSUtils::getFilesInDirByRegex($this->getConfig('directory'), '/.+\.src$/i', $this->getConfig('recursive'));
 
         foreach ($sources as $source) {
             $testCase = new TestCase($source[0]);
@@ -51,7 +51,7 @@ class TesterApp extends \App
         }
 
         $output->renderOutput();
-        return 0; // TODO change
+        return \ExitCodes::SUCCESS;
     }
 
     /**

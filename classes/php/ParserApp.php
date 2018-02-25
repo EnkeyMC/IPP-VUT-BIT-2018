@@ -39,16 +39,9 @@ class ParserApp extends App
             return ExitCodes::SUCCESS;
         }
 
-        $rc = $this->initDependencies();
-        if ($rc !== ExitCodes::SUCCESS)
-            return $rc;
+        $this->initDependencies();
 
-        try {
-            $this->parse();
-        } catch (SourceCodeException $e) {
-            fwrite(STDERR, $e->getMessage());
-            return ExitCodes::ERROR_LEX_SYNT;
-        }
+        $this->parse();
 
         fwrite($this->outputStream, $this->xmlOutput->getOutput());
 
@@ -76,9 +69,9 @@ class ParserApp extends App
      */
     private function checkArguments() {
         if ($this->getConfig('help') && sizeof($this->configuration) > 1)
-            throw new InvalidArgumentException('No other option can be used with option "help"');
+            throw new InvalidArgumentException('No other option can be used with option "help"', ExitCodes::ERROR_PARAMETER);
         if (($this->getConfig('loc') || $this->getConfig('comments')) && $this->getConfig('stats') === false)
-            throw new InvalidArgumentException('Option "loc" or "comments" cannot be used without option "stats"');
+            throw new InvalidArgumentException('Option "loc" or "comments" cannot be used without option "stats"', ExitCodes::ERROR_PARAMETER);
     }
 
     /**
@@ -104,19 +97,9 @@ class ParserApp extends App
      * @return int exit code
      */
     private function initDependencies() {
-        try {
-            $this->inputStream = $this->getInputStream();
-        } catch (OpenStreamException $e) {
-            fwrite(STDERR, $e->getMessage());
-            return ExitCodes::ERROR_OPENING_FILE_IN;
-        }
+        $this->inputStream = $this->getInputStream();
 
-        try {
-            $this->outputStream = $this->getOutputStream();
-        } catch (OpenStreamException $e) {
-            fwrite(STDERR, $e->getMessage());
-            return ExitCodes::ERROR_OPENING_FILE_OUT;
-        }
+        $this->outputStream = $this->getOutputStream();
 
         $lang = new IPPcode18();
         $this->codeAnalyzer = new CodeAnalyzer($lang, $this->inputStream);
@@ -141,7 +124,7 @@ class ParserApp extends App
             $stream = fopen($src, 'r');
 
             if ($stream === false) {
-                throw new OpenStreamException('Failed to open file: '.$src);
+                throw new OpenStreamException('Failed to open file: '.$src, ExitCodes::ERROR_OPENING_FILE_IN);
             }
         }
 
@@ -169,7 +152,7 @@ class ParserApp extends App
             $stream = fopen($out, 'r');
 
             if ($stream === false) {
-                throw new OpenStreamException('Failed to open file: '.$out);
+                throw new OpenStreamException('Failed to open file: '.$out, ExitCodes::ERROR_OPENING_FILE_OUT);
             }
         }
 
@@ -221,7 +204,7 @@ class ParserApp extends App
         if ($statsFile !== false) {
             $stream = fopen($statsFile, 'w');
             if ($stream === false) {
-                throw new OpenStreamException('Failed to open file: '.$statsFile);
+                throw new OpenStreamException('Failed to open file: '.$statsFile, ExitCodes::ERROR_OPENING_FILE_OUT);
             }
 
             if ($this->isOptionInOrder('loc', 'comments')) {

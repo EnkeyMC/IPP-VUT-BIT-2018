@@ -21,6 +21,7 @@ class TextTestOutput implements TestOutput
     public function __construct()
     {
         $this->results = array();
+        $this->successCount = 0;
     }
 
     /**

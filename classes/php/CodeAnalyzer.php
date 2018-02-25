@@ -64,7 +64,7 @@ final class CodeAnalyzer extends EventTrigger {
         else if ($this->context === self::CONTEXT_INSTRUCTION)
             return $this->getOpcodeToken();
         else
-            throw new InvalidContextException();
+            throw new InvalidContextException('Invalid context: '.$this->context, ExitCodes::ERROR_INTERN);
     }
 
     /**
@@ -84,7 +84,7 @@ final class CodeAnalyzer extends EventTrigger {
      */
     private function getHeaderToken() {
         if (feof($this->inputStream))
-            throw new LexicalErrorException($this->getErrorMsg($this->lang->getHeader(), 'EOF'));
+            throw new LexicalErrorException($this->getErrorMsg($this->lang->getHeader(), 'EOF'), ExitCodes::ERROR_LEX_SYNT);
 
         $line = fgets($this->inputStream);
         $line = $this->trimLine($line);
@@ -94,7 +94,7 @@ final class CodeAnalyzer extends EventTrigger {
         if ($line === $this->lang->getHeader())
             return new Token(Token::HEADER, $line);
         else
-            throw new LexicalErrorException($this->getErrorMsg($this->lang->getHeader(), $line));
+            throw new LexicalErrorException($this->getErrorMsg($this->lang->getHeader(), $line), ExitCodes::ERROR_LEX_SYNT);
     }
 
     /**
@@ -121,7 +121,7 @@ final class CodeAnalyzer extends EventTrigger {
                 $this->notify(self::EVENT_ON_LOC);
                 return $opcodeToken;
             } else {
-                throw new LexicalErrorException($this->getErrorMsg('opcode', $opcode));
+                throw new LexicalErrorException($this->getErrorMsg('opcode', $opcode), ExitCodes::ERROR_LEX_SYNT);
             }
         } else {
             return new Token(Token::EOL);
@@ -141,7 +141,8 @@ final class CodeAnalyzer extends EventTrigger {
         if ($argType === null xor empty($this->arguments)) {
             throw new SyntaxErrorException($this->getErrorMsg(
                 empty($this->arguments) ? 'argument' : 'end of line',
-                empty($this->arguments) ? '' : $this->arguments[$this->argN])
+                empty($this->arguments) ? '' : $this->arguments[$this->argN]),
+                ExitCodes::ERROR_LEX_SYNT
             );
         } else if ($argType === null) {
             $this->setContext(self::CONTEXT_INSTRUCTION);
@@ -151,7 +152,7 @@ final class CodeAnalyzer extends EventTrigger {
             unset($this->arguments[$this->argN]);
             return $argToken;
         }
-        throw new RuntimeException();
+        throw new RuntimeException('', ExitCodes::ERROR_INTERN);
     }
 
     /**
@@ -186,6 +187,6 @@ final class CodeAnalyzer extends EventTrigger {
      * @return string message
      */
     private function getErrorMsg($expected, $actual) {
-        return 'Error on line '.$this->lineNum.': Expected '.$expected.', got "'.$actual.'"".';
+        return 'Error on line '.$this->lineNum.': Expected '.$expected.', got "'.$actual.'".';
     }
 }
