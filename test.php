@@ -4,8 +4,8 @@ require_once 'autoload.php';
 
 try {
     $tester = \TestSuite\TesterApp::getInstance();
-} catch (InvalidArgumentException $e) {
+    exit($tester->run());
+} catch (Exception $e) {
     fwrite(STDERR, $e->getMessage());
     exit($e->getCode());
 }
-exit($tester->run());
