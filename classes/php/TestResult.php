@@ -64,4 +64,13 @@ class TestResult
     public function getName() {
         return $this->name;
     }
+
+    /**
+     * Get directory this test is in
+     *
+     * @return string directory
+     */
+    public function getDirectory() {
+        return \OSUtils::getDirectory($this->name);
+    }
 }

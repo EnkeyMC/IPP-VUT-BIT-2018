@@ -170,4 +170,13 @@ final class OSUtils {
     public static function normalizePath($path) {
         return preg_replace('/\\\\/', '/', $path);
     }
+
+    /**
+     * Get directory from filepath
+     *
+     * @return string directory
+     */
+    public static function getDirectory($filepath) {
+        return preg_replace('/[^\\\\\\/]*$/', '', $filepath);
+    }
 }

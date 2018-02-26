@@ -40,7 +40,7 @@ class TesterApp extends \App
         if ($this->getConfig('text'))
             $output = new TextTestOutput();
         else
-            $output = new TextTestOutput();  // TODO change to html
+            $output = new HTMLTestOutput();
 
         $sources = \OSUtils::getFilesInDirByRegex($this->getConfig('directory'), '/.+\.src$/i', $this->getConfig('recursive'));
 
