@@ -12,10 +12,7 @@ class HTMLTestOutput implements TestOutput {
      */
     public function __construct()
     {
-        $this->results = [
-            'results' => array(),
-            'subdirs' => array()
-        ];
+        $this->results = array();
     }
 
     /**
@@ -26,22 +23,15 @@ class HTMLTestOutput implements TestOutput {
     public function addTestResult(TestResult $result)
     {
         $dirs = explode('/', $result->getDirectory());
+        $dirs = array_filter($dirs);
 
         $subdir = &$this->results;
 
         foreach ($dirs as $dir) {
-            if (!isset($subdir['subdirs'][$dir])) {
-                $subdir[$dir] = [
-                    'results' => array(),
-                    'subdirs' => array()
-                ];
-            }
-
-
+            $subdir = &$subdir[$dir];
         }
-    }
 
-    private function createSubdir(&$dir) {
+        $subdir[] = $result;
     }
 
     /**
