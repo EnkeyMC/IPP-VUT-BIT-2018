@@ -57,12 +57,20 @@ class TestResult
     }
 
     /**
-     * Get test name
+     * Get full test name
      *
      * @return string name
      */
-    public function getName() {
+    public function getFullName() {
         return $this->name;
+    }
+
+    /**
+     * Get test name
+     */
+    public function getName() {
+        $levels = explode('/', $this->name);
+        return end($levels);
     }
 
     /**

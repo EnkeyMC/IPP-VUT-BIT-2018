@@ -39,6 +39,61 @@ class HTMLTestOutput implements TestOutput {
      */
     public function renderOutput()
     {
-        var_dump($this->results);
+        $result = $this->recursiveResultCalc($this->results);
+        include 'template.php';
+    }
+
+    private function recursiveResultCalc(array $results, $dir='.') {
+        $calcData = [
+            'dir' => $dir,
+            'success_count' => 0,
+            'total_count' => 0,
+            'failed_tests' => [],
+            'subdirs' => []
+        ];
+        foreach ($results as $dir => $result) {
+            if ($result instanceof TestResult) {
+                $calcData['total_count']++;
+                if ($result->hasError()) {
+                    $failedTest = [
+                        'name' => $result->getName(),
+                        'details' => $this->getTestErrorMsg($result)
+                        ];
+                    $calcData['failed_tests'][] = $failedTest;
+                } else {
+                    $calcData['success_count']++;
+                }
+            } else {
+                $subdir = $this->recursiveResultCalc($result, $dir);
+                $calcData['subdirs'][] = $subdir;
+                $calcData['success_count'] += $subdir['success_count'];
+                $calcData['total_count'] += $subdir['total_count'];
+            }
+        }
+
+        return $calcData;
+    }
+
+    private function getTestErrorMsg(TestResult $testResult) {
+        if (!$testResult->hasError())
+            return '';
+
+        $error = $testResult->getError();
+
+        switch ($error['type']) {
+            case TestResult::ERROR_PARSE_RETURN_CODE:
+                return 'Chybný návratový kód parse skriptu.<br>'.
+                    'Očekávaný: '.$error['details']['expected'].'<br>'.
+                    'Skutečný: '.$error['details']['actual'];
+
+            case TestResult::ERROR_INT_RETURN_CODE:
+                return 'Chybný návratový kód interpretu.<br>'.
+                    'Očekávaný: '.$error['details']['expected'].'<br>'.
+                    'Skutečný: '.$error['details']['actual'];
+
+            case TestResult::ERROR_OUT_DIFF:
+                return 'Nesouhlasí výstup interpretu.<br>'.
+                    str_replace(PHP_EOL, '<br>', $error['details']['diff']);
+        }
     }
 }
