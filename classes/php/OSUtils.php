@@ -91,9 +91,10 @@ final class OSUtils {
      * @param array $args command arguments
      * @param string $inputRedir file to redirect to STDIN
      * @param string $outputRedir file to redirect STDOUT to
+     * @param string $errorRedir file to redirect STDERR to
      * @return string built command
      */
-    private static function buildCommand($cmd, array $args, $inputRedir='', $outputRedir='') {
+    private static function buildCommand($cmd, array $args, $inputRedir='', $outputRedir='', $errorRedir='') {
         $cmd = self::getInstance()->getOSSpecificCommand($cmd);
         foreach ($args as $arg) {
             $cmd .= ' ' . $arg;
@@ -103,6 +104,8 @@ final class OSUtils {
             $cmd .= ' < '.$inputRedir;
         if ($outputRedir)
             $cmd .= ' > '.$outputRedir;
+        if ($errorRedir)
+            $cmd .= ' 2> '.$errorRedir;
 
         return $cmd;
     }
@@ -150,13 +153,14 @@ final class OSUtils {
      * @param array $args command arguments
      * @param string $inputRedir file to redirect to STDIN
      * @param string $outputRedir file to redirect STDOUT to
+     * @param string $errorRedir file to redirect STDERR to
      * @return array containing 'output' and 'return_code' keys
      */
-    public static function runCommand($cmd, array $args, $inputRedir='', $outputRedir='') {
+    public static function runCommand($cmd, array $args, $inputRedir='', $outputRedir='', $errorRedir='') {
         $output = array();
         $rc = 0;
 
-        exec(self::buildCommand($cmd, $args, $inputRedir, $outputRedir), $output, $rc);
+        exec(self::buildCommand($cmd, $args, $inputRedir, $outputRedir, $errorRedir), $output, $rc);
 
         return ['output' => $output, 'return_code' => $rc];
     }

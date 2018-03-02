@@ -43,12 +43,22 @@ class HTMLTestOutput implements TestOutput {
         include 'template.php';
     }
 
-    private function recursiveResultCalc(array $results, $dir='.') {
+    /**
+     * Recursively calculate result summary
+     *
+     * @param array $results test results and subdirectories
+     * @param string $dir current test directory name ('' by default)
+     * @param string $parent_id parent directory ID
+     *
+     * @return array calculated data
+     */
+    private function recursiveResultCalc(array $results, $dir='', $parent_id='dir') {
         $calcData = [
             'dir' => $dir,
+            'dir_id' => $parent_id.'-'.$dir,
             'success_count' => 0,
             'total_count' => 0,
-            'failed_tests' => [],
+            'test_info' => [],
             'subdirs' => []
         ];
         foreach ($results as $dir => $result) {
@@ -56,15 +66,21 @@ class HTMLTestOutput implements TestOutput {
                 $calcData['total_count']++;
                 if ($result->hasError()) {
                     $failedTest = [
+                        'success' => false,
                         'name' => $result->getName(),
                         'details' => $this->getTestErrorMsg($result)
                         ];
-                    $calcData['failed_tests'][] = $failedTest;
+                    $calcData['test_info'][] = $failedTest;
                 } else {
                     $calcData['success_count']++;
+                    $calcData['test_info'][] = [
+                        'success' => true,
+                        'name' => $result->getName(),
+                        'details' => 'Úspěšný'
+                    ];
                 }
             } else {
-                $subdir = $this->recursiveResultCalc($result, $dir);
+                $subdir = $this->recursiveResultCalc($result, $dir, $calcData['dir_id']);
                 $calcData['subdirs'][] = $subdir;
                 $calcData['success_count'] += $subdir['success_count'];
                 $calcData['total_count'] += $subdir['total_count'];
@@ -74,6 +90,12 @@ class HTMLTestOutput implements TestOutput {
         return $calcData;
     }
 
+    /**
+     * Get error message based on test result
+     *
+     * @param TestResult $testResult
+     * @return string error message
+     */
     private function getTestErrorMsg(TestResult $testResult) {
         if (!$testResult->hasError())
             return '';
@@ -84,16 +106,21 @@ class HTMLTestOutput implements TestOutput {
             case TestResult::ERROR_PARSE_RETURN_CODE:
                 return 'Chybný návratový kód parse skriptu.<br>'.
                     'Očekávaný: '.$error['details']['expected'].'<br>'.
-                    'Skutečný: '.$error['details']['actual'];
+                    'Skutečný: '.$error['details']['actual'].'<br><br>'.
+                    'STDERR:<br>'.$error['stderr'];
 
             case TestResult::ERROR_INT_RETURN_CODE:
                 return 'Chybný návratový kód interpretu.<br>'.
                     'Očekávaný: '.$error['details']['expected'].'<br>'.
-                    'Skutečný: '.$error['details']['actual'];
+                    'Skutečný: '.$error['details']['actual'].'<br><br>'.
+                    'STDERR:<br>'.$error['stderr'];;
 
             case TestResult::ERROR_OUT_DIFF:
-                return 'Nesouhlasí výstup interpretu.<br>'.
-                    str_replace(PHP_EOL, '<br>', $error['details']['diff']);
+                return 'Nesouhlasí výstup interpretu.<br><br>'.
+                    str_replace(PHP_EOL, '<br>', $error['details']['diff']).'<br><br>'.
+                    'STDERR:<br>'.$error['stderr'];;
         }
+
+        return '';
     }
 }

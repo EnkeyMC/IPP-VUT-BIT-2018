@@ -108,6 +108,7 @@ final class CodeAnalyzer extends EventTrigger {
             return new Token(Token::EOF);
         $line = fgets($this->inputStream);
         $line = $this->trimLine($line);
+        $this->lineNum++;
 
         if ($line !== '') {
             $this->arguments = $this->lang->splitInstruction($line);
@@ -133,15 +134,18 @@ final class CodeAnalyzer extends EventTrigger {
      *
      * @return Token
      * @throws SyntaxErrorException
+     * @throws LexicalErrorException
      */
     private function getArgToken() {
         $this->argN++;
         $argType = $this->lang->getArgumentType($this->context, $this->argN);
 
         if ($argType === null xor empty($this->arguments)) {
-            throw new SyntaxErrorException($this->getErrorMsg(
-                empty($this->arguments) ? 'argument' : 'end of line',
-                empty($this->arguments) ? '' : $this->arguments[$this->argN]),
+            throw new SyntaxErrorException(
+                $this->getErrorMsg(
+                    empty($this->arguments) ? 'argument' : 'end of line',
+                    empty($this->arguments) ? '' : $this->arguments[$this->argN]
+                ),
                 ExitCodes::ERROR_LEX_SYNT
             );
         } else if ($argType === null) {
@@ -151,8 +155,9 @@ final class CodeAnalyzer extends EventTrigger {
             $argToken = $this->lang->getArgumentToken($argType, $this->arguments[$this->argN]);
             unset($this->arguments[$this->argN]);
             return $argToken;
+        } else {
+            throw new LexicalErrorException($this->getErrorMsg('valid argument',$this->arguments[$this->argN]), ExitCodes::ERROR_LEX_SYNT);
         }
-        throw new RuntimeException('', ExitCodes::ERROR_INTERN);
     }
 
     /**

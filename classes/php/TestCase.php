@@ -85,11 +85,13 @@ class TestCase
     private function testParse() {
         $app = TesterApp::getInstance();
         $tmpFlie = $this->getTmpFileName();
+        $errorTmpFile = $this->getTmpFileName();
         $result = \OSUtils::runCommand(
             $app->getConfig('php-int'),
             [$app->getConfig('parse-script')],
             $this->filePaths[self::FILE_SRC],
-            $tmpFlie
+            $tmpFlie,
+            $errorTmpFile
         );
 
         if ($result['return_code'] != \ExitCodes::SUCCESS) {
@@ -97,12 +99,14 @@ class TestCase
             if ($expectedRC != $result['return_code']) {
                 $this->result->error(
                     TestResult::ERROR_PARSE_RETURN_CODE,
-                    ['expected' => $expectedRC, 'actual' => $result['return_code']]
+                    ['expected' => $expectedRC, 'actual' => $result['return_code']],
+                    file_get_contents($errorTmpFile)
                 );
             }
 
             $this->finished = true;
         }
+        unlink($errorTmpFile);
 
         return $tmpFlie;
     }
@@ -115,26 +119,34 @@ class TestCase
     private function testInterpret($sourceFile) {
         $app = TesterApp::getInstance();
         $tmpFile = $this->getTmpFileName();
+        $errorTmpFile = $this->getTmpFileName();
         $result = \OSUtils::runCommand(
             $app->getConfig('py-int'),
             [$app->getConfig('int-script'), '--source="'.$sourceFile.'"'],
             $this->filePaths[self::FILE_IN],
-            $tmpFile
+            $tmpFile,
+            $errorTmpFile
         );
 
         $expectedRC = $this->getReturnCode();
         if ($expectedRC != $result['return_code'])
             $this->result->error(
                 TestResult::ERROR_INT_RETURN_CODE,
-                ['expected' => $expectedRC, 'actual' => $result['return_code']]
+                ['expected' => $expectedRC, 'actual' => $result['return_code']],
+                file_get_contents($errorTmpFile)
             );
 
         if ($expectedRC == \ExitCodes::SUCCESS) {
             $result = \OSUtils::checkFileDifference($this->filePaths[self::FILE_OUT], $tmpFile);
             if ($result['return_code'] != 0)
-                $this->result->error(TestResult::ERROR_OUT_DIFF, ['diff' => implode(PHP_EOL, $result['output'])]);
+                $this->result->error(
+                    TestResult::ERROR_OUT_DIFF,
+                    ['diff' => implode(PHP_EOL, $result['output'])],
+                    file_get_contents($errorTmpFile)
+                );
         }
 
+        unlink($errorTmpFile);
         unlink($tmpFile);
     }
 

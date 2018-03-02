@@ -44,12 +44,15 @@ class TextTestOutput implements TestOutput
             if ($result->hasError()) {
                 $error = $result->getError();
 
-                echo $result->getName().':'.PHP_EOL;
+                echo $result->getFullName().':'.PHP_EOL;
                 switch ($error['type']) {
                     case TestResult::ERROR_PARSE_RETURN_CODE:
                         echo 'Unexpected parse return code'.PHP_EOL;
                         echo 'Expected: '.$error['details']['expected'].PHP_EOL;
                         echo 'Actual: '.$error['details']['actual'].PHP_EOL;
+                        echo PHP_EOL;
+                        echo 'STDERR:'.PHP_EOL;
+                        echo $error['stderr'].PHP_EOL;
                         echo PHP_EOL;
                         break;
                     case TestResult::ERROR_INT_RETURN_CODE:
@@ -57,10 +60,15 @@ class TextTestOutput implements TestOutput
                         echo 'Expected: '.$error['details']['expected'].PHP_EOL;
                         echo 'Actual: '.$error['details']['actual'].PHP_EOL;
                         echo PHP_EOL;
+                        echo 'STDERR:'.PHP_EOL;
+                        echo $error['stderr'].PHP_EOL;
+                        echo PHP_EOL;
                         break;
                     case TestResult::ERROR_OUT_DIFF:
                         echo 'Different interpret output'.PHP_EOL;
                         echo $error['details']['diff'].PHP_EOL;
+                        echo 'STDERR:'.PHP_EOL;
+                        echo $error['stderr'].PHP_EOL;
                         echo PHP_EOL;
                         break;
                 }

@@ -35,9 +35,14 @@ class TestResult
      *
      * @param $type int test error type
      * @param $details string|array details about error depending on $type
+     * @param $stderr string program standard error output message
      */
-    public function error($type, $details) {
-        $this->error = ['type' => $type, 'details' => $details];
+    public function error($type, $details, $stderr) {
+        $this->error = [
+            'type' => $type,
+            'details' => $details,
+            'stderr' => $stderr
+        ];
     }
 
     /**

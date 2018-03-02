@@ -55,6 +55,10 @@
             background-color: #BADA55;
         }
 
+        .success-text {
+            color: #BADA55;
+        }
+
         .fail {
             background-color: #f26363;
         }
@@ -118,6 +122,7 @@
             padding: 15px;
             /*border: 1px #dddddd solid;*/
             box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
         }
 
         .back-to-top {
@@ -148,16 +153,12 @@
         <p>&nbsp;</p>
         <hr>
         <h2>Úspěšnosti podle adresářů</h2>
-        <p>Kliknutím na adresář zobrazíte detaily chybných testů</p>
+        <p>Kliknutím na adresář zobrazíte detaily jednotlivých testů</p>
         <?php function recurDirList($dir) {
             $percent = round(100*$dir['success_count']/$dir['total_count']);
         ?>
         <ul class="dir-list">
-            <li><a href="#"><?= $dir['dir'] ?></a> <?= $percent ?>% (<?= $dir['success_count'].'/'.$dir['total_count'] ?>)
-                <div class="progress-bar-chart">
-                    <div class="bar success" style="width: <?= $percent ?>%;">&nbsp;</div>
-                    <div class="bar fail" style="width: <?= 100 - $percent ?>%;">&nbsp;</div>
-                </div>
+            <li><a href="#<?= $dir['dir_id'] ?>"><?= $dir['dir'] ?></a> <?= $percent ?>% (<?= $dir['success_count'].'/'.$dir['total_count'] ?>)
                 <?php
                     foreach ($dir['subdirs'] as $subdir) {
                         recurDirList($subdir);
@@ -167,85 +168,42 @@
         </ul>
         <?php } recurDirList($result); ?>
         <hr>
-        <h2>Detaily chybných testů</h2>
-        <div class="dir-details" id="dir">
-            <div class="dir-details-inner">
-                <h3>.</h3>
-                <hr>
-                <table class="tests-details">
-                    <thead>
-                        <tr>
-                            <th>Název testu</th>
-                            <th>Detaily chyby</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>test1</td>
-                            <td class="fail-text">Nesouhlasí návratový kód parseru. <br>
-                                Očekávaný: 21 <br>
-                                Skutečný: 10</td>
-                        </tr>
-                        <tr>
-                            <td>test2</td>
-                            <td class="fail-text">Nesouhlasí návratový kód parseru. <br>
-                                Očekávaný: 21 <br>
-                                Skutečný: 10</td>
-                        </tr>
-                        <tr>
-                            <td>test1263</td>
-                            <td class="fail-text">Nesouhlasí návratový kód parseru. <br>
-                                Očekávaný: 21 <br>
-                                Skutečný: 10</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="dir-details" id="dir-errors">
-                <div class="dir-details-inner">
-                    <h3>errors</h3>
-                    <hr>
-                    <table class="tests-details">
-                        <thead>
-                        <tr>
-                            <th>Název testu</th>
-                            <th>Detaily chyby</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>test1</td>
-                            <td class="fail-text">Nesouhlasí návratový kód parseru. <br>
-                                Očekávaný: 21 <br>
-                                Skutečný: 10</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="dir-details" id="dir-errors-header">
+        <h2>Detaily jednotlivých testů</h2>
+
+        <?php
+            function recurTestDetails($dir)
+            {
+        ?>
+                <div class="dir-details" id="<?= $dir['dir_id'] ?>">
                     <div class="dir-details-inner">
-                        <h3>header</h3>
+                        <h3><?= $dir['dir']; ?></h3>
                         <hr>
+                        <?php if (!empty($dir['test_info'])): ?>
                         <table class="tests-details">
                             <thead>
-                                <tr>
-                                    <th>Název testu</th>
-                                    <th>Detaily chyby</th>
-                                </tr>
+                            <tr>
+                                <th>Název testu</th>
+                                <th>Detaily chyby</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>test1</td>
-                                    <td class="fail-text">Nesouhlasí návratový kód parseru. <br>
-                                        Očekávaný: 21 <br>
-                                        Skutečný: 10</td>
-                                </tr>
+                            <?php foreach($dir['test_info'] as $test): ?>
+                            <tr class="<?= $test['success'] ? 'success-text' : 'fail-text' ?>">
+                                <td><?= $test['name']; ?></td>
+                                <td><?= $test['details']; ?></td>
+                            </tr>
+                            <?php endforeach; ?>
                             </tbody>
                         </table>
+                        <?php endif; ?>
                     </div>
+                    <?php foreach($dir['subdirs'] as $subdir) {
+                        recurTestDetails($subdir);
+                    } ?>
                 </div>
-            </div>
-        </div>
+        <?php
+            } recurTestDetails($result);
+        ?>
     </div>
     <a href="#top" class="back-to-top">Zpět nahoru</a>
 </body>
