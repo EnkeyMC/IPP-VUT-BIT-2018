@@ -7,7 +7,7 @@
  */
 class IPPcode18 {
 
-    const HEADER = '.IPPcode18';
+    const HEADER = '.ippcode18';
 
     const COMMENT_SEPARATOR = '#';
 
@@ -64,23 +64,13 @@ class IPPcode18 {
     ];
 
     /**
-     * Get initial context for code analyser
+     * Check if given header is valid
      *
-     * @return string initial context
+     * @param string $header input header
+     * @return bool true if valid, false otherwise
      */
-    public function getInitialContext()
-    {
-        return self::HEADER;
-    }
-
-    /**
-     * Get language header
-     *
-     * @return string header
-     */
-    public function getHeader()
-    {
-        return self::HEADER;
+    public function isValidHeader($header) {
+        return strtolower($header) === self::HEADER;
     }
 
     /**

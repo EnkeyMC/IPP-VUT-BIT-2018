@@ -8,6 +8,7 @@
 final class CodeAnalyzer extends EventTrigger {
     /** Used in setContext() */
     const CONTEXT_INSTRUCTION = 'inst';
+    const CONTEXT_HEADER = 'header';
 
     // Event constants
     const EVENT_ON_COMMENT = 'onComment';
@@ -34,7 +35,7 @@ final class CodeAnalyzer extends EventTrigger {
     public function __construct(IPPcode18 $lang, $inputStream=STDIN)
     {
         $this->lang = $lang;
-        $this->context = $lang->getInitialContext();
+        $this->context = self::CONTEXT_HEADER;
         $this->inputStream = $inputStream;
         $this->lineNum = 0;
         $this->arguments = array();
@@ -57,7 +58,7 @@ final class CodeAnalyzer extends EventTrigger {
      * @throws InvalidContextException
      */
     public function getNextToken() {
-        if ($this->context === $this->lang->getHeader())
+        if ($this->context === self::CONTEXT_HEADER)
             return $this->getHeaderToken();
         else if ($this->lang->isValidOpcode($this->context))
             return $this->getArgToken();
@@ -91,10 +92,10 @@ final class CodeAnalyzer extends EventTrigger {
         $this->setContext(self::CONTEXT_INSTRUCTION);
         $this->lineNum++;
 
-        if ($line === $this->lang->getHeader())
+        if ($this->lang->isValidHeader($line))
             return new Token(Token::HEADER, $line);
         else
-            throw new LexicalErrorException($this->getErrorMsg($this->lang->getHeader(), $line), ExitCodes::ERROR_LEX_SYNT);
+            throw new LexicalErrorException($this->getErrorMsg(IPPcode18::HEADER, $line), ExitCodes::ERROR_LEX_SYNT);
     }
 
     /**

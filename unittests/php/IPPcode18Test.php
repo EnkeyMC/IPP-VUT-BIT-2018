@@ -12,10 +12,6 @@ class IPPcode18Test extends TestCase {
         $this->lang = new IPPcode18();
     }
 
-    public function testGetHeader() {
-        $this->assertSame('.IPPcode18', $this->lang->getHeader());
-    }
-
     public function testCommentSeparator() {
         $this->assertSame('#', $this->lang->getCommentSeparator());
     }

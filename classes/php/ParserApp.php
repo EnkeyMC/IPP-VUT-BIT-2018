@@ -184,12 +184,17 @@ class ParserApp extends App
                 $processingInst = true;
                 $this->xmlOutput->startInstruction($token->getData());
             } else if ($tokenType === Token::EOL) {
-                if ($processingInst)
+                if ($processingInst) {
                     $this->xmlOutput->endInstruction();
+                    $processingInst = false;
+                }
             } else {
                 $this->xmlOutput->addArgument($this->codeAnalyzer->getArgumentOrder(), $tokenType, $token->getData());
             }
         } while ($token->getType() !== Token::EOF);
+
+        if ($processingInst)
+            $this->xmlOutput->endInstruction();
 
         $this->xmlOutput->endOutput();
     }

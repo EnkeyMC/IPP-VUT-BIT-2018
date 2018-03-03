@@ -69,7 +69,8 @@ class TesterApp extends \App
      * Check argument combinations
      */
     private function checkArguments() {
-        // TODO check arguments
+        if ($this->getConfig('help') && sizeof($this->configuration) > 1)
+            throw new \InvalidArgumentException('No other option can be used with option "help"', \ExitCodes::ERROR_PARAMETER);
     }
 
     /**
