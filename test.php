@@ -6,6 +6,6 @@ try {
     $tester = \TestSuite\TesterApp::getInstance();
     exit($tester->run());
 } catch (Exception $e) {
-    fwrite(STDERR, $e->getMessage());
+    fwrite(STDERR, $e->getMessage().PHP_EOL);
     exit($e->getCode());
 }

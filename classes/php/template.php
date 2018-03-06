@@ -1,3 +1,4 @@
+<?php if (isset($result)): ?>
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -208,3 +209,4 @@
     <a href="#top" class="back-to-top">Zpět nahoru</a>
 </body>
 </html>
+<?php endif; ?>
