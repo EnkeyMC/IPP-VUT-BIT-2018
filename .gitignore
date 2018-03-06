@@ -1,5 +1,7 @@
 .idea/
 coverage/
+xomach00.zip
+output.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
