@@ -120,10 +120,18 @@ final class OSUtils {
      */
     public static function getFilesInDirByRegex($directory, $regex, $recursive=false) {
         if ($recursive) {
-            $directoryIterator = new RecursiveDirectoryIterator($directory);
+            try {
+                $directoryIterator = new RecursiveDirectoryIterator($directory);
+            } catch (UnexpectedValueException $e) {
+                throw new InvalidArgumentException("Invalid directory '".$directory."'");
+            }
             $iterator = new RecursiveIteratorIterator($directoryIterator);
         } else {
-            $directoryIterator = new DirectoryIterator($directory);
+            try {
+                $directoryIterator = new DirectoryIterator($directory);
+            } catch (UnexpectedValueException $e) {
+                throw new InvalidArgumentException("Invalid directory '".$directory."'");
+            }
             $iterator = new IteratorIterator($directoryIterator);
         }
 

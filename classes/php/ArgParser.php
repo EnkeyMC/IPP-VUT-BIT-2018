@@ -69,11 +69,11 @@ final class ArgParser {
      */
     private function getOpt() {
         global $argv;
-        unset($argv[0]);  // Remove script
+        $prepared_argv = $this->prepareArguments($argv);
         $result = array();
         $match = array();
 
-        foreach ($argv as $arg) {
+        foreach ($prepared_argv as $arg) {
             if (preg_match(self::OPTION_REGEX, $arg, $match)) {
                 unset($match[0]);
                 $match = array_filter($match);
@@ -92,6 +92,25 @@ final class ArgParser {
         }
 
         return $result;
+    }
+
+    /**
+     * Prepare arguments for parsing. Removes script argument and merges options with separated values
+     *
+     * @param array $argv command line arguments
+     *
+     * @return array prepared arguments
+     */
+    private function prepareArguments(array $argv) {
+        unset($argv[0]); // Remove script
+        foreach ($argv as $key => &$arg) {
+            if (preg_match("/=$/", $arg) && isset($argv[$key+1])) {
+                $arg .= $argv[$key+1];
+                $argv[$key+1] = '';
+            }
+        }
+
+        return array_filter($argv);
     }
 
     /**
