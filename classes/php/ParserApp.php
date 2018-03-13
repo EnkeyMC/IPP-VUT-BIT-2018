@@ -84,9 +84,9 @@ class ParserApp extends App
         echo '    php parse.php [MOZNOSTI]' . PHP_EOL;
         echo 'MOZNOSTI:' . PHP_EOL;
         echo '    -h, --help            Vypise tuto napovedu' . PHP_EOL;
-        echo '    -s, --src <soubor>    Urci vstupni soubor skriptu (vychozi STDIN)' . PHP_EOL;
-        echo '    -o, --out <soubor>    Urci vystupni soubor skriptu (vychozi STDOUT)' . PHP_EOL;
-        echo '        --stats <soubor>  Zapne sbirani statistik do zadaneho souboru' . PHP_EOL;
+        echo '    -s, --src=<soubor>    Urci vstupni soubor skriptu (vychozi STDIN)' . PHP_EOL;
+        echo '    -o, --out=<soubor>    Urci vystupni soubor skriptu (vychozi STDOUT)' . PHP_EOL;
+        echo '        --stats=<soubor>  Zapne sbirani statistik do zadaneho souboru' . PHP_EOL;
         echo '    -l, --loc             V pripade pouziti moznosti --stats zapne vypis statistiky radku kodu' . PHP_EOL;
         echo '    -c, --comments        V pripade pouziti moznosti --stats zapne vypis statistiky komentaru' . PHP_EOL;
     }

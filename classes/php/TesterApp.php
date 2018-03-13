@@ -101,13 +101,13 @@ class TesterApp extends \App
         echo '    php test.php [MOZNOSTI]' . PHP_EOL;
         echo 'MOZNOSTI:' . PHP_EOL;
         echo '    -h, --help                   Vypise tuto napovedu' . PHP_EOL;
-        echo '    -d, --directory <adresar>    Testy bude hledat v zadanem adresari (chybi-li tento parametr, tak skript prochazi aktualni adresar)' . PHP_EOL;
+        echo '    -d, --directory=<adresar>    Testy bude hledat v zadanem adresari (chybi-li tento parametr, tak skript prochazi aktualni adresar)' . PHP_EOL;
         echo '    -r, --recursive              Testy bude hledat i v podadresarich' . PHP_EOL;
-        echo '    -p  --parse-script <soubor>  Soubor se skriptem v PHP pro analyzu zdrojoveho kodu (vychozi parse.php v aktualnim adresari)' . PHP_EOL;
-        echo '    -i, --int-script <soubor>    Soubor se skriptem v Python pro interpretaci XML reprezentace kodu IPPcode18 (vychozi interpret.py v aktualnim adresari)' . PHP_EOL;
-        echo '        --php-int <interpret>    Pouzije zadany interpret PHP (vychozi "php5.6")' . PHP_EOL;
-        echo '        --py-int <interpret>     Pouzije zadany interpret Pythonu (vychozi "python3.6")' . PHP_EOL;
-        echo '    -t, --temp-dir <adresar>     Pouzije zadany adresar pro docasne soubory, adresar musi existovat (vychozi je aktualni adresar)' . PHP_EOL;
+        echo '    -p  --parse-script=<soubor>  Soubor se skriptem v PHP pro analyzu zdrojoveho kodu (vychozi parse.php v aktualnim adresari)' . PHP_EOL;
+        echo '    -i, --int-script=<soubor>    Soubor se skriptem v Python pro interpretaci XML reprezentace kodu IPPcode18 (vychozi interpret.py v aktualnim adresari)' . PHP_EOL;
+        echo '        --php-int=<interpret>    Pouzije zadany interpret PHP (vychozi "php5.6")' . PHP_EOL;
+        echo '        --py-int=<interpret>     Pouzije zadany interpret Pythonu (vychozi "python3.6")' . PHP_EOL;
+        echo '    -t, --temp-dir=<adresar>     Pouzije zadany adresar pro docasne soubory, adresar musi existovat (vychozi je aktualni adresar)' . PHP_EOL;
         echo '        --text                   Vystup bude v jednoduche textove podobe' . PHP_EOL;
     }
 }
