@@ -162,7 +162,7 @@
             $percent = round(100*$dir['success_count']/$dir['total_count']);
         ?>
         <ul class="dir-list">
-            <li><a href="#<?= $dir['dir_id'] ?>"><?= $dir['dir'] ?></a> <?= $percent ?>% (<?= $dir['success_count'].'/'.$dir['total_count'] ?>)
+            <li><a href="#<?= $dir['dir_id'] ?>"><?= htmlspecialchars($dir['dir']) ?></a> <?= $percent ?>% (<?= $dir['success_count'].'/'.$dir['total_count'] ?>)
                 <?php
                     foreach ($dir['subdirs'] as $subdir) {
                         recurDirList($subdir);
@@ -180,7 +180,7 @@
         ?>
                 <div class="dir-details" id="<?= $dir['dir_id'] ?>">
                     <div class="dir-details-inner">
-                        <h3><?= $dir['dir']; ?></h3>
+                        <h3><?= htmlspecialchars($dir['dir']); ?></h3>
                         <hr>
                         <?php if (!empty($dir['test_info'])): ?>
                         <table class="tests-details">
@@ -193,7 +193,7 @@
                             <tbody>
                             <?php foreach($dir['test_info'] as $test): ?>
                             <tr class="<?= $test['success'] ? 'success-text' : 'fail-text' ?>">
-                                <td><?= $test['name']; ?></td>
+                                <td><?= htmlspecialchars($test['name']); ?></td>
                                 <td><?= $test['details']; ?></td>
                             </tr>
                             <?php endforeach; ?>

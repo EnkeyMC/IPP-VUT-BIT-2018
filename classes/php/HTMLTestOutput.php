@@ -52,10 +52,10 @@ class HTMLTestOutput implements TestOutput {
      *
      * @return array calculated data
      */
-    private function recursiveResultCalc(array $results, $dir='', $parent_id='dir') {
+    private function recursiveResultCalc(array $results, $dir='') {
         $calcData = [
             'dir' => $dir,
-            'dir_id' => $parent_id.'-'.$dir,
+            'dir_id' => $this->get_unique_id(),
             'success_count' => 0,
             'total_count' => 0,
             'test_info' => [],
@@ -80,7 +80,7 @@ class HTMLTestOutput implements TestOutput {
                     ];
                 }
             } else {
-                $subdir = $this->recursiveResultCalc($result, $dir, $calcData['dir_id']);
+                $subdir = $this->recursiveResultCalc($result, $dir);
                 $calcData['subdirs'][] = $subdir;
                 $calcData['success_count'] += $subdir['success_count'];
                 $calcData['total_count'] += $subdir['total_count'];
@@ -88,6 +88,11 @@ class HTMLTestOutput implements TestOutput {
         }
 
         return $calcData;
+    }
+
+    private function get_unique_id() {
+        static $id = 0;
+        return 'ID'.$id++;
     }
 
     /**
@@ -107,18 +112,18 @@ class HTMLTestOutput implements TestOutput {
                 return 'Chybný návratový kód parse skriptu.<br>'.
                     'Očekávaný: '.$error['details']['expected'].'<br>'.
                     'Skutečný: '.$error['details']['actual'].'<br><br>'.
-                    'STDERR:<br>'.$error['stderr'];
+                    'STDERR:<br>'.htmlspecialchars($error['stderr']);
 
             case TestResult::ERROR_INT_RETURN_CODE:
                 return 'Chybný návratový kód interpretu.<br>'.
                     'Očekávaný: '.$error['details']['expected'].'<br>'.
                     'Skutečný: '.$error['details']['actual'].'<br><br>'.
-                    'STDERR:<br>'.$error['stderr'];;
+                    'STDERR:<br>'.htmlspecialchars($error['stderr']);
 
             case TestResult::ERROR_OUT_DIFF:
                 return 'Nesouhlasí výstup interpretu.<br><br>'.
-                    str_replace(PHP_EOL, '<br>', $error['details']['diff']).'<br><br>'.
-                    'STDERR:<br>'.$error['stderr'];;
+                    str_replace(PHP_EOL, '<br>', htmlspecialchars($error['details']['diff'])).'<br><br>'.
+                    'STDERR:<br>'.htmlspecialchars($error['stderr']);
         }
 
         return '';

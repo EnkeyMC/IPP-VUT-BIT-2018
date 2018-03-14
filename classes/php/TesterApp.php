@@ -36,7 +36,7 @@ class TesterApp extends \App
             $this->printHelp();
             return \ExitCodes::SUCCESS;
         }
-        
+
         if (!file_exists($this->getConfig('parse-script')))
             throw new \InvalidArgumentException('Parse script not found.', \ExitCodes::ERROR_SCRIPT_NOT_FOUND);
         if (!file_exists($this->getConfig('int-script')))
