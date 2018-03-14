@@ -36,6 +36,11 @@ class TesterApp extends \App
             $this->printHelp();
             return \ExitCodes::SUCCESS;
         }
+        
+        if (!file_exists($this->getConfig('parse-script')))
+            throw new \InvalidArgumentException('Parse script not found.', \ExitCodes::ERROR_SCRIPT_NOT_FOUND);
+        if (!file_exists($this->getConfig('int-script')))
+            throw new \InvalidArgumentException('Interpret script not found.', \ExitCodes::ERROR_SCRIPT_NOT_FOUND);
 
         if ($this->getConfig('text'))
             $output = new TextTestOutput();
@@ -71,10 +76,6 @@ class TesterApp extends \App
     private function checkArguments() {
         if ($this->getConfig('help') && sizeof($this->configuration) > 1)
             throw new \InvalidArgumentException('No other option can be used with option "help"', \ExitCodes::ERROR_PARAMETER);
-        if (!file_exists($this->getConfig('parse-script')))
-            throw new \InvalidArgumentException('Parse script not found.', \ExitCodes::ERROR_SCRIPT_NOT_FOUND);
-        if (!file_exists($this->getConfig('int-script')))
-            throw new \InvalidArgumentException('Interpret script not found.', \ExitCodes::ERROR_SCRIPT_NOT_FOUND);
     }
 
     /**
