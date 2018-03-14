@@ -71,6 +71,10 @@ class TesterApp extends \App
     private function checkArguments() {
         if ($this->getConfig('help') && sizeof($this->configuration) > 1)
             throw new \InvalidArgumentException('No other option can be used with option "help"', \ExitCodes::ERROR_PARAMETER);
+        if (!file_exists($this->getConfig('parse-script')))
+            throw new \InvalidArgumentException('Parse script not found.', \ExitCodes::ERROR_SCRIPT_NOT_FOUND);
+        if (!file_exists($this->getConfig('int-script')))
+            throw new \InvalidArgumentException('Interpret script not found.', \ExitCodes::ERROR_SCRIPT_NOT_FOUND);
     }
 
     /**
@@ -80,9 +84,9 @@ class TesterApp extends \App
         if ($this->getConfig('directory') === false)
             $this->configuration['directory'] = '.';
         if ($this->getConfig('parse-script') === false)
-            $this->configuration['parse-script'] = 'parse.php';
+            $this->configuration['parse-script'] = './parse.php';
         if ($this->getConfig('int-script') === false)
-            $this->configuration['int-script'] = 'interpret.py';
+            $this->configuration['int-script'] = './interpret.py';
         if ($this->getConfig('php-int') === false)
             $this->configuration['php-int'] = 'php5.6';
         if ($this->getConfig('py-int') === false)

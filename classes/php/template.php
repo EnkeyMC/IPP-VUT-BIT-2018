@@ -145,6 +145,9 @@
     <div class="container" id="top">
         <h1>Přehled úspěšnosti testů</h1>
         <hr>
+        <?php if ($result['total_count'] === 0): ?>
+        <h2>Nebyly nalezeny žádné testy</h2>
+        <?php else: ?>
         <?php $percent = round(100*$result['success_count']/$result['total_count']) ?>
         <h2><?= $result['success_count'].'/'.$result['total_count'] ?> úspěšných testů (<?= $percent ?>%)</h2>
         <div class="progress-bar-chart">
@@ -204,6 +207,7 @@
                 </div>
         <?php
             } recurTestDetails($result);
+            endif;
         ?>
     </div>
     <a href="#top" class="back-to-top">Zpět nahoru</a>

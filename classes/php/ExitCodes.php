@@ -15,5 +15,7 @@ class ExitCodes
 
     const ERROR_LEX_SYNT = 21;
 
+    const ERROR_SCRIPT_NOT_FOUND = 41;
+
     const ERROR_INTERN = 99;
 }
