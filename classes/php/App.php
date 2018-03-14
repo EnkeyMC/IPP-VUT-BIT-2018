@@ -56,24 +56,6 @@ abstract class App
     }
 
     /**
-     * Set application root directory
-     *
-     * @param string $dir root directory
-     */
-    public function setRootDir($dir) {
-        $this->rootDir = rtrim(\OSUtils::normalizePath($dir), '/');
-    }
-
-    /**
-     * Get application root directory
-     *
-     * @return string root directory without leading directory separator
-     */
-    public function getRootDir() {
-        return $this->rootDir;
-    }
-
-    /**
      * Run application
      *
      * @return int Exit code
