@@ -1,4 +1,4 @@
-from classes.python.exit_codes import LEXICAL_ERROR, SYNTAX_ERROR, XML_FORMAT_ERROR, INTERN_ERROR
+from classes.python.exit_codes import LEXICAL_ERROR, SYNTAX_ERROR, XML_FORMAT_ERROR, INTERN_ERROR, SEMANTIC_ERROR
 
 
 class ApplicationError(Exception):
@@ -36,3 +36,9 @@ class InternalError(ApplicationError):
 
     def __init__(self, message: str):
         super().__init__(message, INTERN_ERROR)
+
+
+class SemanticError(ApplicationError):
+
+    def __init__(self, message: str):
+        super().__init__(message, SEMANTIC_ERROR)

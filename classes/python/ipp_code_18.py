@@ -52,7 +52,7 @@ class IPPcode18:
         assert opcode in IPPcode18.INSTRUCTION_LIST
         assert 1 <= nth_arg <= len(IPPcode18.INSTRUCTION_LIST[opcode])
         arg_type = IPPcode18.INSTRUCTION_LIST[opcode][nth_arg-1]
-        return False  # TODO
+        return True  # TODO
 
     @staticmethod
     def get_opcode_arg_num(opcode: str) -> int:
