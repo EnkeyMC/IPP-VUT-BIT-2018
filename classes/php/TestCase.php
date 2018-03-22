@@ -19,7 +19,7 @@ class TestCase
         self::FILE_SRC => ['extension' => 'src', 'default' => ''],
         self::FILE_IN => ['extension' => 'in', 'default' => ''],
         self::FILE_OUT => ['extension' => 'out', 'default' => ''],
-        self::FILE_RC => ['extension' => 'rc', 'default' => \ExitCodes::ERROR_LEX_SYNT] // TODO change back to 0
+        self::FILE_RC => ['extension' => 'rc', 'default' => \ExitCodes::EXIT_SUCCESS]
     ];
 
     /** @var array of file path for each file type */

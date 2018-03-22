@@ -1,6 +1,6 @@
 from xml.etree import ElementTree
 import re
-from classes.python.exceptions import XMLFormatError, SrcSyntaxError, LexicalError
+from classes.python.exceptions import XMLFormatError, SrcSyntaxError, LexicalError, SemanticError
 from classes.python.ipp_code_18 import IPPcode18
 
 
@@ -95,7 +95,7 @@ class IPPParser:
                 raise XMLFormatError("Neplatný agrument {} instrukce {}".format(arg.tag, order))
 
         if len(args) != IPPcode18.get_opcode_arg_num(opcode):
-            raise XMLFormatError("Neplatný počet argumentů instrukce {}".format(order))
+            raise SemanticError("Neplatný počet argumentů instrukce {}".format(order))
 
         for i in range(1, len(args) + 1):
             if i not in args:

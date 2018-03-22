@@ -1,7 +1,7 @@
 from unittest.case import TestCase
 
 from classes.python.ipp_parser import IPPParser
-from classes.python.exceptions import XMLFormatError, SrcSyntaxError, LexicalError
+from classes.python.exceptions import XMLFormatError, SrcSyntaxError, LexicalError, SemanticError
 
 
 class TestIPPParser(TestCase):
@@ -179,7 +179,7 @@ class TestIPPParser(TestCase):
 
     def test_invalid_number_of_args(self):
         self.assertRaises(
-            XMLFormatError,
+            SemanticError,
             self.parser.parse_from_string,
             """<?xml version="1.0" encoding="UTF-8" ?>
             <program language="IPPcode18">

@@ -2,6 +2,7 @@ from xml.etree.ElementTree import Element
 
 from classes.python.instruction import Instruction
 from classes.python.exceptions import SemanticError
+from classes.python.frame import Frame
 
 
 class Variable:
@@ -10,26 +11,15 @@ class Variable:
         self.value = None
 
 
-class SymbolTables:
-    def __init__(self):
-        self.st_glob = dict()
-        self.st_temp = dict()
-        self.st_local = list()
-
-    def __getitem__(self, item: str) -> dict:
-        if item == 'TF':
-            return self.st_temp
-        elif item == 'LF':
-            return self.st_local[-1]
-        else:
-            return self.st_glob
-
-
 class Program:
     def __init__(self, xml_dom: Element):
         self._xml_dom = xml_dom
         self._inst_list = None
-        self.symbol_tables = SymbolTables()
+        self._frames = {
+            Frame.GF: dict(),
+            Frame.LF: list(),
+            Frame.TF: None
+        }
         self.labels = dict()
         self.call_stack = list()
         self._curr_inst = 0
@@ -60,3 +50,31 @@ class Program:
 
     def next_inst(self):
         self._curr_inst += 1
+
+    def get_frame(self, frame: Frame):
+        if frame == Frame.LF:
+            return self._frames[frame][-1]
+        return self._frames[frame]
+
+    def get_var(self, frame: Frame, var: str):
+        return self.get_frame(frame)[var]
+
+    def create_tmp_frame(self):
+        self._frames[Frame.TF] = dict()
+
+    def push_tmp_frame(self):
+        self._frames[Frame.LF].append(self._frames[Frame.TF])
+        self._frames[Frame.TF] = None
+
+    def pop_to_tmp_frame(self):
+        self._frames[Frame.TF] = self._frames[Frame.LF].pop()
+
+    def create_var(self, frame: Frame, name: str):
+        self.get_frame(frame)[name] = Variable()
+
+    def call(self, label: str):
+        self.call_stack.append(self._curr_inst + 1)
+        self._curr_inst = self.labels[label]
+
+    def ret(self):
+        self._curr_inst = self.call_stack.pop()
