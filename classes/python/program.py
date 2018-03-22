@@ -1,4 +1,7 @@
 from xml.etree.ElementTree import Element
+from copy import copy
+
+import sys
 
 from classes.python.instruction import Instruction
 from classes.python.exceptions import SemanticError
@@ -6,9 +9,9 @@ from classes.python.frame import Frame
 
 
 class Variable:
-    def __init__(self):
-        self.type = None
-        self.value = None
+    def __init__(self, var_type=None, value=None):
+        self.type = var_type
+        self.value = value
 
 
 class Program:
@@ -23,6 +26,7 @@ class Program:
         self.labels = dict()
         self.call_stack = list()
         self._curr_inst = 0
+        self._data_stack = list()
 
     def analyze(self):
         self._inst_list = list()
@@ -43,6 +47,7 @@ class Program:
         self._curr_inst = 0
         while self._curr_inst < len(self._inst_list):
             self._inst_list[self._curr_inst].run(self)
+            self.next_inst()
 
     def jump_to_label(self, label: str):
         assert label in self.labels
@@ -73,8 +78,20 @@ class Program:
         self.get_frame(frame)[name] = Variable()
 
     def call(self, label: str):
-        self.call_stack.append(self._curr_inst + 1)
+        self.call_stack.append(self._curr_inst)
         self._curr_inst = self.labels[label]
 
     def ret(self):
         self._curr_inst = self.call_stack.pop()
+
+    def data_push(self, value):
+        self._data_stack.append(value)
+
+    def data_pop(self):
+        return self._data_stack.pop()
+
+    def print_debug(self):
+        print('Current instruction: {}'.format(self._curr_inst), file=sys.stderr)
+        print('Global frame: {}'.format(repr(self.get_frame(Frame.GF))), file=sys.stderr)
+        print('Temporary frame: {}'.format(repr(self.get_frame(Frame.TF))), file=sys.stderr)
+        print('Local frame: {}'.format(repr(self.get_frame(Frame.LF))), file=sys.stderr)

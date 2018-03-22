@@ -160,6 +160,7 @@ class TestIPPParser(TestCase):
             <program language="IPPcode18">
                 <instruction order="1" opcode="NOT">
                     <arg2 type="var">GF@var</arg2>
+                    <arg3 type="var">GF@var</arg3>
                 </instruction>
             </program>"""
         )

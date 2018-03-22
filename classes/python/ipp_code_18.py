@@ -1,5 +1,6 @@
 from enum import Enum
 from xml.etree.ElementTree import Element
+from classes.python.exceptions import XMLFormatError
 
 
 class ArgType(Enum):
@@ -50,7 +51,8 @@ class IPPcode18:
     @staticmethod
     def is_valid_arg(opcode: str, nth_arg: int, arg: Element) -> bool:
         assert opcode in IPPcode18.INSTRUCTION_LIST
-        assert 1 <= nth_arg <= len(IPPcode18.INSTRUCTION_LIST[opcode])
+        if not (1 <= nth_arg <= len(IPPcode18.INSTRUCTION_LIST[opcode])):
+            raise XMLFormatError('Neplatný argument arg{} u operace {}'.format(nth_arg, opcode))
         arg_type = IPPcode18.INSTRUCTION_LIST[opcode][nth_arg-1]
         return True  # TODO
 

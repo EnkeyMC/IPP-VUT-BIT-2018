@@ -1,0 +1,17 @@
+.IPPcode18
+
+defvar GF@a
+defvar GF@b
+defvar GF@result
+
+move GF@a bool@true
+move GF@b bool@false
+
+and GF@result GF@a GF@b
+write GF@result
+
+or GF@result GF@a GF@b
+write GF@result
+
+not GF@result GF@a
+write GF@result

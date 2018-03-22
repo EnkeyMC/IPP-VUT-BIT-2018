@@ -1,0 +1,20 @@
+.IPPcode18
+
+defvar GF@a
+defvar GF@b
+defvar GF@res
+
+move GF@a string@Hello
+move GF@b string@World
+
+concat GF@res GF@a GF@b
+write GF@res
+
+strlen GF@res GF@a
+write GF@res
+
+getchar GF@res GF@b int@2
+write GF@res
+
+setchar GF@a int@1 GF@res
+write GF@a

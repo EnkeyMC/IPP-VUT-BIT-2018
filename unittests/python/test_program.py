@@ -48,9 +48,10 @@ class TestProgram(TestCase):
         )
 
         program = Program(xml_dom)
+        program.analyze()
         self.assertRaises(
             SemanticError,
-            program.analyze
+            program.interpret()
         )
 
     def test_call_invalid_label(self):
@@ -67,8 +68,9 @@ class TestProgram(TestCase):
         )
 
         program = Program(xml_dom)
+        program.analyze()
         self.assertRaises(
             SemanticError,
-            program.analyze
+            program.interpret()
         )
 
