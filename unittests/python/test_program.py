@@ -33,3 +33,42 @@ class TestProgram(TestCase):
             SemanticError,
             program.analyze
         )
+
+    def test_jump_to_invalid_label(self):
+        xml_dom = self.parser.parse_from_string(
+            """<?xml version="1.0" encoding="UTF-8"?>
+            <program language="IPPcode18">
+                <instruction order="1" opcode="LABEL">
+                    <arg1 type="label">lab</arg1>
+                </instruction>
+                <instruction order="2" opcode="JUMP">
+                    <arg1 type="label">invalid</arg1>
+                </instruction>
+            </program>"""
+        )
+
+        program = Program(xml_dom)
+        self.assertRaises(
+            SemanticError,
+            program.analyze
+        )
+
+    def test_call_invalid_label(self):
+        xml_dom = self.parser.parse_from_string(
+            """<?xml version="1.0" encoding="UTF-8"?>
+            <program language="IPPcode18">
+                <instruction order="1" opcode="LABEL">
+                    <arg1 type="label">lab</arg1>
+                </instruction>
+                <instruction order="2" opcode="CALL">
+                    <arg1 type="label">invalid</arg1>
+                </instruction>
+            </program>"""
+        )
+
+        program = Program(xml_dom)
+        self.assertRaises(
+            SemanticError,
+            program.analyze
+        )
+
