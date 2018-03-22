@@ -1,6 +1,5 @@
 from xml.etree.ElementTree import Element
-
-from classes.python.program import *
+from classes.python.frame import Frame
 
 
 class Arg:
