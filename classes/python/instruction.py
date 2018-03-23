@@ -7,66 +7,71 @@ import sys
 
 class Instruction:
     INSTRUCTION_LIST = {
-        'MOVE': [ArgType.ARG_VAR, ArgType.ARG_SYMB],
+        'MOVE': [ArgType.arg_dest, ArgType.arg_any],
         'CREATEFRAME': [],
         'PUSHFRAME': [],
         'POPFRAME': [],
-        'DEFVAR': [ArgType.ARG_VAR],
-        'CALL': [ArgType.ARG_LABEL],
+        'DEFVAR': [ArgType.arg_dest],
+        'CALL': [ArgType.arg_label],
         'RETURN': [],
-        'PUSHS': [ArgType.ARG_SYMB],
-        'POPS': [ArgType.ARG_VAR],
-        'ADD': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'SUB': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'MUL': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'IDIV': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'LT': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'GT': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'EQ': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'AND': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'OR': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'NOT': [ArgType.ARG_VAR, ArgType.ARG_SYMB],
-        'INT2CHAR': [ArgType.ARG_VAR, ArgType.ARG_SYMB],
-        'STRI2INT': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'READ': [ArgType.ARG_VAR, ArgType.ARG_TYPE],
-        'WRITE': [ArgType.ARG_SYMB],
-        'CONCAT': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'STRLEN': [ArgType.ARG_VAR, ArgType.ARG_SYMB],
-        'GETCHAR': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'SETCHAR': [ArgType.ARG_VAR, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'TYPE': [ArgType.ARG_VAR, ArgType.ARG_SYMB],
-        'LABEL': [ArgType.ARG_LABEL],
-        'JUMP': [ArgType.ARG_LABEL],
-        'JUMPIFEQ': [ArgType.ARG_LABEL, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'JUMPIFNEQ': [ArgType.ARG_LABEL, ArgType.ARG_SYMB, ArgType.ARG_SYMB],
-        'DPRINT': [ArgType.ARG_SYMB],
+        'PUSHS': [ArgType.arg_any],
+        'POPS': [ArgType.arg_dest],
+        'ADD': [ArgType.arg_dest, ArgType.arg_int, ArgType.arg_int],
+        'SUB': [ArgType.arg_dest, ArgType.arg_int, ArgType.arg_int],
+        'MUL': [ArgType.arg_dest, ArgType.arg_int, ArgType.arg_int],
+        'IDIV': [ArgType.arg_dest, ArgType.arg_int, ArgType.arg_int],
+        'LT': [ArgType.arg_dest, ArgType.arg_any, ArgType.arg_any],
+        'GT': [ArgType.arg_dest, ArgType.arg_any, ArgType.arg_any],
+        'EQ': [ArgType.arg_dest, ArgType.arg_any, ArgType.arg_any],
+        'AND': [ArgType.arg_dest, ArgType.arg_bool, ArgType.arg_bool],
+        'OR': [ArgType.arg_dest, ArgType.arg_bool, ArgType.arg_bool],
+        'NOT': [ArgType.arg_dest, ArgType.arg_bool],
+        'INT2CHAR': [ArgType.arg_dest, ArgType.arg_int],
+        'STRI2INT': [ArgType.arg_dest, ArgType.arg_string, ArgType.arg_int],
+        'READ': [ArgType.arg_dest, ArgType.arg_type],
+        'WRITE': [ArgType.arg_any],
+        'CONCAT': [ArgType.arg_dest, ArgType.arg_string, ArgType.arg_string],
+        'STRLEN': [ArgType.arg_dest, ArgType.arg_string],
+        'GETCHAR': [ArgType.arg_dest, ArgType.arg_string, ArgType.arg_int],
+        'SETCHAR': [ArgType.arg_dest, ArgType.arg_int, ArgType.arg_string],
+        'TYPE': [ArgType.arg_dest, ArgType.arg_any],
+        'LABEL': [ArgType.arg_label],
+        'JUMP': [ArgType.arg_label],
+        'JUMPIFEQ': [ArgType.arg_label, ArgType.arg_any, ArgType.arg_any],
+        'JUMPIFNEQ': [ArgType.arg_label, ArgType.arg_any, ArgType.arg_any],
+        'DPRINT': [ArgType.arg_dest_or_any],
         'BREAK': []
     }
 
-    inst_mapping = dict()
+    _inst_mapping = dict()
 
     def __init__(self, opcode: str, args: list):
         self.opcode = opcode
         self.args = args
-        
+
     def run(self, context):
-        Instruction.inst_mapping[self.opcode](context, *self.args)
+        self._check_arguments(context)
+        Instruction._inst_mapping[self.opcode](context, *self.args)
+
+    def _check_arguments(self, context):
+        for i in range(0, len(self.args)):
+            Instruction.INSTRUCTION_LIST[self.opcode][i](context, self.args[i])
 
     @staticmethod
     def run_func(func: callable):
         name = func.__name__
         name = name[1:]
-        Instruction.inst_mapping[name.upper()] = func
+        Instruction._inst_mapping[name.upper()] = func
         return func
-    
+
     @staticmethod
     def from_xml_dom(inst_dom: Element):
         opcode = inst_dom.attrib['opcode']
         args = list()
-    
+
         for arg in inst_dom:
             args.append(Arg(arg.attrib['type'], arg.text))
-    
+
         return Instruction(opcode, args)
 
     @staticmethod

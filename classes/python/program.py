@@ -104,6 +104,12 @@ class Program:
     def data_pop(self):
         return self._data_stack.pop()
 
+    def get_inst_number(self):
+        return self._curr_inst + 1
+
+    def get_current_inst(self):
+        return self._inst_list[self._curr_inst]
+
     def print_debug(self):
         print('Current instruction: {}'.format(self._curr_inst), file=sys.stderr)
         print('Global frame: {}'.format(repr(self.get_frame(Frame.GF))), file=sys.stderr)

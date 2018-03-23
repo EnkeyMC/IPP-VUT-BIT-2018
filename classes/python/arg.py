@@ -1,17 +1,6 @@
 from classes.python.frame import Frame
-from classes.python.exceptions import InternalError
+from classes.python.exceptions import InternalError, OperandTypeError
 from copy import copy
-from enum import Enum
-
-
-class ArgType(Enum):
-    ARG_INT = 0
-    ARG_BOOL = 1
-    ARG_STRING = 2
-    ARG_TYPE = 3
-    ARG_LABEL = 4
-    ARG_VAR = 5
-    ARG_SYMB = 6
 
 
 class Arg:
@@ -78,3 +67,53 @@ class Arg:
                 return 'false'
         else:
             return str(val)
+
+
+class ArgType:
+    @staticmethod
+    def arg_int(context, arg: Arg):
+        if arg.get_data_type(context) != 'int':
+            ArgType._raise_type_error(context, 'int', arg.get_data_type(context))
+
+    @staticmethod
+    def arg_bool(context, arg: Arg):
+        if arg.get_data_type(context) != 'bool':
+            ArgType._raise_type_error(context, 'bool', arg.get_data_type(context))
+
+    @staticmethod
+    def arg_string(context, arg: Arg):
+        if arg.get_data_type(context) != 'string':
+            ArgType._raise_type_error(context, 'string', arg.get_data_type(context))
+
+    @staticmethod
+    def arg_type(context, arg: Arg):
+        if arg.type != 'type':
+            ArgType._raise_type_error(context, 'type', arg.type)
+
+    @staticmethod
+    def arg_label(context, arg: Arg):
+        if arg.type != 'label':
+            ArgType._raise_type_error(context, 'int', arg.type)
+
+    @staticmethod
+    def arg_dest(context, arg: Arg):
+        if arg.type != 'var':
+            ArgType._raise_type_error(context, 'var', arg.type)
+
+    @staticmethod
+    def arg_any(context, arg: Arg):
+        if arg.get_data_type(context) not in ['int', 'bool', 'string']:
+            ArgType._raise_type_error(context, '[int, bool, string]', arg.get_data_type(context))
+
+    @staticmethod
+    def arg_dest_or_any(context, arg: Arg):
+        if arg.type != 'var' and arg.type not in ['int', 'bool', 'string']:
+            ArgType._raise_type_error(context, '[int, bool, string]', arg.get_data_type(context))
+
+    @staticmethod
+    def _raise_type_error(context, expected: str, actual: str):
+        raise OperandTypeError(
+            "Chyba instrukce {} ({}): Očekáván typ {}, skutečný: {}".format(
+                context.get_inst_number(), context.get_current_inst().opcode, expected, actual
+            )
+        )
