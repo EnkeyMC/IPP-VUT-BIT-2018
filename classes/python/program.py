@@ -1,5 +1,4 @@
 from xml.etree.ElementTree import Element
-from copy import copy
 
 import sys
 
@@ -12,6 +11,21 @@ class Variable:
     def __init__(self, var_type=None, value=None):
         self.type = var_type
         self.value = value
+
+    def value_str(self):
+        if type(self.value) is bool:
+            if self.value:
+                return 'true'
+            else:
+                return 'false'
+        else:
+            return str(self.value)
+
+    def __repr__(self):
+        if self.value is None:
+            return 'uninitialized'
+        else:
+            return self.value_str() + ' (' + str(self.type) + ')'
 
 
 class Program:
