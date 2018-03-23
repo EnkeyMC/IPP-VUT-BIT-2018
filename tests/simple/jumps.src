@@ -1,0 +1,31 @@
+.IPPcode18
+
+jump main
+
+label l1
+write GF@a
+jump l1back
+
+
+label func1
+write GF@a
+return
+
+
+label main
+defvar GF@a
+move GF@a string@Hello
+jump l1
+label l1back
+
+call func1
+
+write GF@a
+
+jumpifeq l2 GF@a string@Hello
+write string@no
+label l2
+jumpifneq l3 GF@a string@Hello
+write string@yes
+label l3
+call func1
