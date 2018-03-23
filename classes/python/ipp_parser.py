@@ -1,7 +1,7 @@
+from classes.python.exceptions import XMLFormatError, SrcSyntaxError, LexicalError, SemanticError
+from classes.python.instruction import Instruction
 from xml.etree import ElementTree
 import re
-from classes.python.exceptions import XMLFormatError, SrcSyntaxError, LexicalError, SemanticError
-from classes.python.ipp_code_18 import IPPcode18
 
 
 class IPPParser:
@@ -68,7 +68,7 @@ class IPPParser:
                 except ValueError:
                     raise LexicalError("Atribut 'order' neobsahuje číselnou hodnotu")
             elif attrib == "opcode":
-                if value not in IPPcode18.INSTRUCTION_LIST:
+                if value not in Instruction.INSTRUCTION_LIST:
                     raise SrcSyntaxError("Neplatný operační kód '{}'".format(value))
                 else:
                     has_opcode = True
@@ -89,12 +89,12 @@ class IPPParser:
                 if nth in args:
                     raise XMLFormatError("Duplikátní argument {} instrukce {}".format(arg.tag, order))
                 args.append(nth)
-                if not IPPcode18.is_valid_arg(opcode, nth, arg):
+                if not Instruction.is_valid_arg(opcode, nth, arg):
                     raise SrcSyntaxError("Nesprávný typ argumentu operace {} instrukce {}".format(opcode, order))
             else:
                 raise XMLFormatError("Neplatný agrument {} instrukce {}".format(arg.tag, order))
 
-        if len(args) != IPPcode18.get_opcode_arg_num(opcode):
+        if len(args) != Instruction.get_opcode_arg_num(opcode):
             raise SemanticError("Neplatný počet argumentů instrukce {}".format(order))
 
         for i in range(1, len(args) + 1):
