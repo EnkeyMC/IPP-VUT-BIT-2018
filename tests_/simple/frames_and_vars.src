@@ -1,8 +1,0 @@
-.IPPcode18
-
-defvar GF@global
-createframe
-defvar TF@tmp
-move TF@tmp bool@false
-pushframe
-write LF@tmp
