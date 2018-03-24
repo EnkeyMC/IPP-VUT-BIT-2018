@@ -3,6 +3,7 @@ basepath = 'tests/xomach00/'
 while True:
     try:
         test = input('Test to generate: ')
+        rc = input('Return code: ')
     except EOFError:
         print('Exiting...')
         break
@@ -19,7 +20,7 @@ while True:
             print(test+'.out generated...')
 
         with open(basepath+test+'.rc', 'x') as src:
-            print('0', file=src)
+            print(rc, file=src)
             print(test+'.rc generated...')
 
     except Exception as e:
