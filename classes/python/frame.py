@@ -14,3 +14,11 @@ class Frame(Enum):
             return Frame.LF
         else:
             return Frame.GF
+
+    def __str__(self):
+        if self is Frame.TF:
+            return 'TF'
+        if self is Frame.LF:
+            return 'LF'
+        else:
+            return 'GF'

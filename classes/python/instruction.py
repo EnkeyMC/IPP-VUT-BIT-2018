@@ -34,7 +34,7 @@ class Instruction:
         'STRLEN': [ArgType.arg_dest, ArgType.arg_string],
         'GETCHAR': [ArgType.arg_dest, ArgType.arg_string, ArgType.arg_int],
         'SETCHAR': [ArgType.arg_dest, ArgType.arg_int, ArgType.arg_string],
-        'TYPE': [ArgType.arg_dest, ArgType.arg_any],
+        'TYPE': [ArgType.arg_dest, ArgType.arg_dest_or_any],
         'LABEL': [ArgType.arg_label],
         'JUMP': [ArgType.arg_label],
         'JUMPIFEQ': [ArgType.arg_label, ArgType.arg_any, ArgType.arg_any],

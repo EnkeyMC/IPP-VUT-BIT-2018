@@ -1,4 +1,4 @@
-from classes.python.exit_codes import LEXICAL_ERROR, SYNTAX_ERROR, XML_FORMAT_ERROR, INTERN_ERROR, SEMANTIC_ERROR, OPERAND_TYPE_ERROR
+from classes.python.exit_codes import *
 
 
 class ApplicationError(Exception):
@@ -48,3 +48,22 @@ class OperandTypeError(ApplicationError):
 
     def __init__(self, message: str):
         super().__init__(message, OPERAND_TYPE_ERROR)
+
+
+class UndefinedVar(ApplicationError):
+
+    def __init__(self, message: str):
+        super().__init__(message, VAR_DOES_NOT_EXIST_ERROR)
+
+
+class UndefinedFrame(ApplicationError):
+
+    def __init__(self, message: str):
+        super().__init__(message, FRAME_DOES_NOT_EXIST_ERROR)
+
+
+class MissingValue(ApplicationError):
+
+    def __init__(self, message: str):
+        super().__init__(message, MISSING_VALUE_ERROR)
+

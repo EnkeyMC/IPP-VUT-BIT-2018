@@ -3,7 +3,7 @@ from xml.etree.ElementTree import Element
 import sys
 
 from classes.python.instruction import Instruction
-from classes.python.exceptions import SemanticError
+from classes.python.exceptions import SemanticError, UndefinedVar, UndefinedFrame, MissingValue
 from classes.python.frame import Frame
 
 
@@ -61,22 +61,27 @@ class Program:
         self._curr_inst = 0
         while self._curr_inst < len(self._inst_list):
             self._inst_list[self._curr_inst].run(self)
-            self.next_inst()
+            self._curr_inst += 1
 
     def jump_to_label(self, label: str):
-        assert label in self.labels
+        if label not in self.labels:
+            raise SemanticError("Skok na neexistující návěstí {}".format(label))
         self._curr_inst = self.labels[label]
-
-    def next_inst(self):
-        self._curr_inst += 1
 
     def get_frame(self, frame: Frame):
         if frame == Frame.LF:
+            if len(self._frames[frame]) == 0:
+                raise UndefinedFrame("Pokus o přístup k prázdnému zásobníku lokálních rámců")
             return self._frames[frame][-1]
+        if frame == Frame.TF and self._frames[frame] is None:
+            raise UndefinedFrame("Přístup k nedefinovanému rámci {}".format(frame))
         return self._frames[frame]
 
     def get_var(self, frame: Frame, var: str):
-        return self.get_frame(frame)[var]
+        frame_vars = self.get_frame(frame)
+        if var not in frame_vars:
+            raise UndefinedVar("Přístup k nedefinované proměnné '{}' na rámci {}".format(var, frame))
+        return frame_vars[var]
 
     def create_tmp_frame(self):
         self._frames[Frame.TF] = dict()
@@ -86,7 +91,7 @@ class Program:
         self._frames[Frame.TF] = None
 
     def pop_to_tmp_frame(self):
-        self._frames[Frame.TF] = self._frames[Frame.LF].pop()
+        self._frames[Frame.TF] = self.get_frame(Frame.LF).pop()
 
     def create_var(self, frame: Frame, name: str):
         self.get_frame(frame)[name] = Variable()
@@ -96,12 +101,16 @@ class Program:
         self._curr_inst = self.labels[label]
 
     def ret(self):
+        if len(self.call_stack) == 0:
+            raise MissingValue("Volání instrukce RETURN mimo funkci")
         self._curr_inst = self.call_stack.pop()
 
     def data_push(self, value):
         self._data_stack.append(value)
 
     def data_pop(self):
+        if len(self._data_stack) == 0:
+            raise MissingValue("Pokus o čtení z prázdného datového zásobníku")
         return self._data_stack.pop()
 
     def get_inst_number(self):

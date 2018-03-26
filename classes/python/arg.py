@@ -1,5 +1,5 @@
 from classes.python.frame import Frame
-from classes.python.exceptions import InternalError, OperandTypeError
+from classes.python.exceptions import InternalError, OperandTypeError, MissingValue
 from copy import copy
 
 
@@ -102,6 +102,8 @@ class ArgType:
 
     @staticmethod
     def arg_any(context, arg: Arg):
+        if arg.get_data_type(context) is None:
+            raise MissingValue("Pokus o čtení neinicializované proměnné")
         if arg.get_data_type(context) not in ['int', 'bool', 'string']:
             ArgType._raise_type_error(context, '[int, bool, string]', arg.get_data_type(context))
 
