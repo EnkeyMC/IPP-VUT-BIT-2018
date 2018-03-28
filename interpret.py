@@ -7,7 +7,8 @@ import subprocess
 
 
 def exec_parser(src_file: str):
-    result = subprocess.run(['php', 'parse.php', '-s=' + src_file], check=True, stdout=subprocess.PIPE)
+    stdin = open(src_file)
+    result = subprocess.run(['php', 'parse.php'], check=True, stdout=subprocess.PIPE, stdin=stdin)
     return result.stdout
 
 

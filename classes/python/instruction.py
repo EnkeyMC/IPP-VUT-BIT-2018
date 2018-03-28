@@ -260,7 +260,12 @@ def _getchar(context, dest: Arg, string: Arg, idx: Arg):
 def _setchar(context, dest: Arg, idx: Arg, src: Arg):
     val = dest.get_value(context)
     index = idx.get_value(context)
-    val = val[:index] + src.get_value(context)[0] + val[index + 1:]
+    src_val = src.get_value(context)
+    if index >= len(val) or index < 0:
+        raise StringOperationError("Neplatný index {}".format(index))
+    if len(src_val) == 0:
+        raise StringOperationError("Prázdný zdrojový řetězec")
+    val = val[:index] + src_val[0] + val[index + 1:]
     dest.set_value(context, val)
 
 
