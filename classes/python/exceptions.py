@@ -73,3 +73,9 @@ class DivisionByZeroError(ApplicationError):
     def __init__(self, message: str):
         super().__init__(message, DIVISION_BY_ZERO_ERROR)
 
+
+class StringOperationError(ApplicationError):
+
+    def __init__(self, message: str):
+        super().__init__(message, STRING_OPERATION_ERROR)
+

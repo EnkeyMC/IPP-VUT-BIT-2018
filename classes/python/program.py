@@ -87,7 +87,7 @@ class Program:
         self._frames[Frame.TF] = dict()
 
     def push_tmp_frame(self):
-        self._frames[Frame.LF].append(self._frames[Frame.TF])
+        self._frames[Frame.LF].append(self.get_frame(Frame.TF))
         self._frames[Frame.TF] = None
 
     def pop_to_tmp_frame(self):

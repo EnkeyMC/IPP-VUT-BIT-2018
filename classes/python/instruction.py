@@ -1,4 +1,4 @@
-from classes.python.exceptions import XMLFormatError, DivisionByZeroError, OperandTypeError
+from classes.python.exceptions import XMLFormatError, DivisionByZeroError, OperandTypeError, StringOperationError
 from classes.python.arg import Arg, ArgType
 from xml.etree.ElementTree import Element
 import operator
@@ -33,7 +33,7 @@ class Instruction:
         'CONCAT': [ArgType.arg_dest, ArgType.arg_string, ArgType.arg_string],
         'STRLEN': [ArgType.arg_dest, ArgType.arg_string],
         'GETCHAR': [ArgType.arg_dest, ArgType.arg_string, ArgType.arg_int],
-        'SETCHAR': [ArgType.arg_dest, ArgType.arg_int, ArgType.arg_string],
+        'SETCHAR': [ArgType.arg_string, ArgType.arg_int, ArgType.arg_string],
         'TYPE': [ArgType.arg_dest, ArgType.arg_dest_or_any],
         'LABEL': [ArgType.arg_label],
         'JUMP': [ArgType.arg_label],
@@ -202,19 +202,28 @@ def _not(context, dest: Arg, op1: Arg):
 
 @Instruction.run_func
 def _int2char(context, dest: Arg, idx: Arg):
-    dest.set_value(context, chr(idx.get_value(context)))
+    try:
+        dest.set_value(context, chr(idx.get_value(context)))
+    except ValueError:
+        raise StringOperationError("Neplatná ordinální hodnota Unicode: {}".format(idx.get_value(context)))
 
 
 @Instruction.run_func
 def _stri2int(context, dest: Arg, src_str: Arg, idx: Arg):
-    dest.set_value(context, ord(src_str.get_value(context)[idx.get_value(context)]))
+    try:
+        dest.set_value(context, ord(src_str.get_value(context)[idx.get_value(context)]))
+    except IndexError:
+        raise StringOperationError("Neplatný index {}".format(idx.get_value(context)))
 
 
 @Instruction.run_func
 def _read(context, var: Arg, in_type: Arg):
     read = input()
     if in_type.value == 'int':
-        var.set_value(context, int(read))
+        try:
+            var.set_value(context, int(read))
+        except ValueError:
+            var.set_value(context, 0)
     elif in_type.value == 'string':
         var.set_value(context, read)
     else:
@@ -241,7 +250,10 @@ def _strlen(context, dest: Arg, string: Arg):
 
 @Instruction.run_func
 def _getchar(context, dest: Arg, string: Arg, idx: Arg):
-    dest.set_value(context, string.get_value(context)[idx.get_value(context)])
+    try:
+        dest.set_value(context, string.get_value(context)[idx.get_value(context)])
+    except IndexError:
+        raise StringOperationError("Neplatný index {}".format(idx.get_value(context)))
 
 
 @Instruction.run_func
