@@ -34,10 +34,16 @@ else:
         print(err.get_message(), file=stderr)
         exit(err.get_exit_code())
 
+program = Program(xml_dom)
 try:
-    program = Program(xml_dom)
     program.analyze()
-    program.interpret()
 except ApplicationError as err:
     print(err.get_message(), file=stderr)
+    exit(err.get_exit_code())
+
+try:
+    program.interpret()
+except ApplicationError as err:
+    print("Chyba instukce {} ({}): "
+          .format(program.get_inst_number(), program.get_current_inst().opcode) + err.get_message(), file=stderr)
     exit(err.get_exit_code())

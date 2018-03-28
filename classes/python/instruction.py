@@ -80,7 +80,7 @@ class Instruction:
     def is_valid_arg(opcode: str, nth_arg: int, arg: Element) -> bool:
         assert opcode in Instruction.INSTRUCTION_ARGS
         if not (1 <= nth_arg <= len(Instruction.INSTRUCTION_ARGS[opcode])):
-            raise XMLFormatError('Neplatný argument arg{} u operace {}'.format(nth_arg, opcode))
+            raise XMLFormatError('Neplatný argument arg{}'.format(nth_arg, opcode))
         arg_type = Instruction.INSTRUCTION_ARGS[opcode][nth_arg - 1]
         return True  # TODO
 
@@ -96,7 +96,7 @@ def _binary_operation(context, dest: Arg, op1: Arg, op2: Arg, op):
 
 def _check_if_same_type(context, arg1: Arg, arg2: Arg):
     if arg1.get_data_type(context) != arg2.get_data_type(context):
-        raise OperandTypeError("Argumenty instrukce {} ({}) musí být stejného typu"
+        raise OperandTypeError("Argumenty musí být stejného typu"
                                .format(context.get_current_inst().opcode, context.get_inst_number()))
 
 
