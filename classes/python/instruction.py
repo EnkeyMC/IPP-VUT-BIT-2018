@@ -1,4 +1,4 @@
-from classes.python.exceptions import XMLFormatError
+from classes.python.exceptions import XMLFormatError, DivisionByZeroError, OperandTypeError
 from classes.python.arg import Arg, ArgType
 from xml.etree.ElementTree import Element
 import operator
@@ -6,7 +6,7 @@ import sys
 
 
 class Instruction:
-    INSTRUCTION_LIST = {
+    INSTRUCTION_ARGS = {
         'MOVE': [ArgType.arg_dest, ArgType.arg_any],
         'CREATEFRAME': [],
         'PUSHFRAME': [],
@@ -55,7 +55,7 @@ class Instruction:
 
     def _check_arguments(self, context):
         for i in range(0, len(self.args)):
-            Instruction.INSTRUCTION_LIST[self.opcode][i](context, self.args[i])
+            Instruction.INSTRUCTION_ARGS[self.opcode][i](context, self.args[i])
 
     @staticmethod
     def run_func(func: callable):
@@ -70,26 +70,34 @@ class Instruction:
         args = list()
 
         for arg in inst_dom:
+            if arg.text is None:
+                arg.text = ''
             args.append(Arg(arg.attrib['type'], arg.text))
 
         return Instruction(opcode, args)
 
     @staticmethod
     def is_valid_arg(opcode: str, nth_arg: int, arg: Element) -> bool:
-        assert opcode in Instruction.INSTRUCTION_LIST
-        if not (1 <= nth_arg <= len(Instruction.INSTRUCTION_LIST[opcode])):
+        assert opcode in Instruction.INSTRUCTION_ARGS
+        if not (1 <= nth_arg <= len(Instruction.INSTRUCTION_ARGS[opcode])):
             raise XMLFormatError('Neplatný argument arg{} u operace {}'.format(nth_arg, opcode))
-        arg_type = Instruction.INSTRUCTION_LIST[opcode][nth_arg - 1]
+        arg_type = Instruction.INSTRUCTION_ARGS[opcode][nth_arg - 1]
         return True  # TODO
 
     @staticmethod
     def get_opcode_arg_num(opcode: str) -> int:
-        assert opcode in Instruction.INSTRUCTION_LIST
-        return len(Instruction.INSTRUCTION_LIST[opcode])
+        assert opcode in Instruction.INSTRUCTION_ARGS
+        return len(Instruction.INSTRUCTION_ARGS[opcode])
 
 
 def _binary_operation(context, dest: Arg, op1: Arg, op2: Arg, op):
     dest.set_value(context, op(op1.get_value(context), op2.get_value(context)))
+
+
+def _check_if_same_type(context, arg1: Arg, arg2: Arg):
+    if arg1.get_data_type(context) != arg2.get_data_type(context):
+        raise OperandTypeError("Argumenty instrukce {} ({}) musí být stejného typu"
+                               .format(context.get_current_inst().opcode, context.get_inst_number()))
 
 
 @Instruction.run_func
@@ -154,21 +162,26 @@ def _mul(context, dest: Arg, op1: Arg, op2: Arg):
 
 @Instruction.run_func
 def _idiv(context, dest: Arg, op1: Arg, op2: Arg):
+    if op2.get_value(context) == 0:
+        raise DivisionByZeroError("Pokus o dělení nulou")
     _binary_operation(context, dest, op1, op2, operator.floordiv)
 
 
 @Instruction.run_func
 def _lt(context, dest: Arg, op1: Arg, op2: Arg):
+    _check_if_same_type(context, op1, op2)
     _binary_operation(context, dest, op1, op2, operator.lt)
 
 
 @Instruction.run_func
 def _gt(context, dest: Arg, op1: Arg, op2: Arg):
+    _check_if_same_type(context, op1, op2)
     _binary_operation(context, dest, op1, op2, operator.gt)
 
 
 @Instruction.run_func
 def _eq(context, dest: Arg, op1: Arg, op2: Arg):
+    _check_if_same_type(context, op1, op2)
     _binary_operation(context, dest, op1, op2, operator.eq)
 
 
@@ -256,12 +269,14 @@ def _jump(context, label: Arg):
 
 @Instruction.run_func
 def _jumpifeq(context, label: Arg, op1: Arg, op2: Arg):
+    _check_if_same_type(context, op1, op2)
     if op1.get_value(context) == op2.get_value(context):
         context.jump_to_label(label.get_value(context))
 
 
 @Instruction.run_func
 def _jumpifneq(context, label: Arg, op1: Arg, op2: Arg):
+    _check_if_same_type(context, op1, op2)
     if op1.get_value(context) != op2.get_value(context):
         context.jump_to_label(label.get_value(context))
 

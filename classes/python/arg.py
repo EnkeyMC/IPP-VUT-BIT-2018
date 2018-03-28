@@ -1,11 +1,13 @@
 from classes.python.frame import Frame
-from classes.python.exceptions import InternalError, OperandTypeError, MissingValue
+from classes.python.exceptions import InternalError, OperandTypeError, MissingValue, UndefinedVar
 from copy import copy
+import re
 
 
 class Arg:
 
     def __init__(self, arg_type: str, value: str):
+        self._esc_seq_re = re.compile(r"(?<=\\)\d{3}")
         self.type = arg_type
         if arg_type == 'var':
             parts = value.split('@')
@@ -18,8 +20,20 @@ class Arg:
                 self.value = True
             else:
                 self.value = False
+        elif arg_type == 'string':
+            self.value = self._convert_escapes(value)
         else:
             self.value = value
+
+    def _convert_escapes(self, string: str):
+        matches = self._esc_seq_re.findall(string)
+        converted = dict()
+        for match in matches:
+            converted[match] = chr(int(match))
+
+        for seq, char in converted.items():
+            string = string.replace("\\" + seq, char)
+        return string
 
     def get_data_type(self, context):
         if self.is_var():
@@ -32,20 +46,24 @@ class Arg:
 
     def set_value(self, context, value):
         assert self.is_var()
+        frame = context.get_frame(self.frame)
+        if self.value not in frame:
+            raise UndefinedVar("Pokus o zápis do nedefinované proměnné")
+        
         if type(value) is Arg:
             if value.type == 'var':
-                context.get_frame(self.frame)[self.value] = copy(context.get_var(value.frame, value.value))
+                frame[self.value] = copy(context.get_var(value.frame, value.value))
             else:
-                context.get_frame(self.frame)[self.value].value = value.value
-                context.get_frame(self.frame)[self.value].type = value.type
+                frame[self.value].value = value.value
+                frame[self.value].type = value.type
         else:
-            context.get_frame(self.frame)[self.value].value = value
+            frame[self.value].value = value
             if type(value) is int:
-                context.get_frame(self.frame)[self.value].type = 'int'
+                frame[self.value].type = 'int'
             elif type(value) is bool:
-                context.get_frame(self.frame)[self.value].type = 'bool'
+                frame[self.value].type = 'bool'
             elif type(value) is str:
-                context.get_frame(self.frame)[self.value].type = 'string'
+                frame[self.value].type = 'string'
             else:
                 raise InternalError("Neznámý typ {}".format(type(value)))
 
@@ -72,16 +90,19 @@ class Arg:
 class ArgType:
     @staticmethod
     def arg_int(context, arg: Arg):
+        ArgType._check_if_initialized(context, arg)
         if arg.get_data_type(context) != 'int':
             ArgType._raise_type_error(context, 'int', arg.get_data_type(context))
 
     @staticmethod
     def arg_bool(context, arg: Arg):
+        ArgType._check_if_initialized(context, arg)
         if arg.get_data_type(context) != 'bool':
             ArgType._raise_type_error(context, 'bool', arg.get_data_type(context))
 
     @staticmethod
     def arg_string(context, arg: Arg):
+        ArgType._check_if_initialized(context, arg)
         if arg.get_data_type(context) != 'string':
             ArgType._raise_type_error(context, 'string', arg.get_data_type(context))
 
@@ -102,8 +123,7 @@ class ArgType:
 
     @staticmethod
     def arg_any(context, arg: Arg):
-        if arg.get_data_type(context) is None:
-            raise MissingValue("Pokus o čtení neinicializované proměnné")
+        ArgType._check_if_initialized(context, arg)
         if arg.get_data_type(context) not in ['int', 'bool', 'string']:
             ArgType._raise_type_error(context, '[int, bool, string]', arg.get_data_type(context))
 
@@ -119,3 +139,8 @@ class ArgType:
                 context.get_inst_number(), context.get_current_inst().opcode, expected, actual
             )
         )
+
+    @staticmethod
+    def _check_if_initialized(context, arg: Arg):
+        if arg.get_data_type(context) == '':
+            raise MissingValue("Pokus o čtení neinicializované proměnné")

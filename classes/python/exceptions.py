@@ -67,3 +67,9 @@ class MissingValue(ApplicationError):
     def __init__(self, message: str):
         super().__init__(message, MISSING_VALUE_ERROR)
 
+
+class DivisionByZeroError(ApplicationError):
+
+    def __init__(self, message: str):
+        super().__init__(message, DIVISION_BY_ZERO_ERROR)
+

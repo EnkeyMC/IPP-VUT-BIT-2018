@@ -91,7 +91,9 @@ class Program:
         self._frames[Frame.TF] = None
 
     def pop_to_tmp_frame(self):
-        self._frames[Frame.TF] = self.get_frame(Frame.LF).pop()
+        if len(self._frames[Frame.LF]) == 0:
+            raise UndefinedFrame("Pokus o přístup k prázdnému zásobníku lokálních rámců")
+        self._frames[Frame.TF] = self._frames[Frame.LF].pop()
 
     def create_var(self, frame: Frame, name: str):
         self.get_frame(frame)[name] = Variable()

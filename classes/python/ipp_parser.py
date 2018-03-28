@@ -68,7 +68,7 @@ class IPPParser:
                 except ValueError:
                     raise LexicalError("Atribut 'order' neobsahuje číselnou hodnotu")
             elif attrib == "opcode":
-                if value not in Instruction.INSTRUCTION_LIST:
+                if value not in Instruction.INSTRUCTION_ARGS:
                     raise SrcSyntaxError("Neplatný operační kód '{}'".format(value))
                 else:
                     has_opcode = True
