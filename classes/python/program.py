@@ -99,6 +99,8 @@ class Program:
         self.get_frame(frame)[name] = Variable()
 
     def call(self, label: str):
+        if label not in self.labels:
+            raise SemanticError("Volání nedefinované funkce {}".format(label))
         self.call_stack.append(self._curr_inst)
         self._curr_inst = self.labels[label]
 

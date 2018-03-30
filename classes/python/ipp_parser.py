@@ -95,7 +95,7 @@ class IPPParser:
                 raise XMLFormatError("Neplatný agrument {} instrukce {}".format(arg.tag, order))
 
         if len(args) != Instruction.get_opcode_arg_num(opcode):
-            raise SemanticError("Neplatný počet argumentů instrukce {}".format(order))
+            raise SrcSyntaxError("Neplatný počet argumentů instrukce {}".format(order))
 
         for i in range(1, len(args) + 1):
             if i not in args:

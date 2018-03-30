@@ -51,7 +51,7 @@ class TestProgram(TestCase):
         program.analyze()
         self.assertRaises(
             SemanticError,
-            program.interpret()
+            program.interpret
         )
 
     def test_call_invalid_label(self):
@@ -71,6 +71,6 @@ class TestProgram(TestCase):
         program.analyze()
         self.assertRaises(
             SemanticError,
-            program.interpret()
+            program.interpret
         )
 
