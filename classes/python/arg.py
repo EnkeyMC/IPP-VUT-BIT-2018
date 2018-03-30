@@ -5,9 +5,12 @@ import re
 
 
 class Arg:
+    _esc_seq_re = None
 
     def __init__(self, arg_type: str, value: str):
-        self._esc_seq_re = re.compile(r"(?<=\\)\d{3}")
+        if Arg._esc_seq_re is None:
+            Arg._esc_seq_re = re.compile(r"(?<=\\)\d{3}")
+        
         self.type = arg_type
         if arg_type == 'var':
             parts = value.split('@')

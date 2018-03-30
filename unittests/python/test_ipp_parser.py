@@ -202,6 +202,19 @@ class TestIPPParser(TestCase):
             </program>"""
         )
 
+    def test_invalid_arg_attrib(self):
+        self.assertRaises(
+            XMLFormatError,
+            self.parser.parse_from_string,
+            """<?xml version="1.0" encoding="UTF-8" ?>
+            <program language="IPPcode18">
+                <instruction order="1" opcode="NOT">
+                    <arg1 type="var">GF@var</arg1>
+                    <arg2 type="var" wat="fd">GF@var</arg2>
+                </instruction>
+            </program>"""
+        )
+
     def test_invalid_arg_not_type(self):
         self.assertRaises(
             XMLFormatError,
@@ -436,7 +449,7 @@ class TestIPPParser(TestCase):
                 """<?xml version="1.0" encoding="UTF-8" ?>
                 <program language="IPPcode18">
                     <instruction order="1" opcode="MOVE">
-                        <arg1 type="var">GF@_var-&*$%</arg1>
+                        <arg1 type="var">GF@_var-&amp;*$%</arg1>
                         <arg2 type="int">5</arg2>
                     </instruction>
                 </program>"""
@@ -476,7 +489,7 @@ class TestIPPParser(TestCase):
                 """<?xml version="1.0" encoding="UTF-8" ?>
                 <program language="IPPcode18">
                     <instruction order="1" opcode="LABEL">
-                        <arg1 type="label">_label-&*$%</arg1>
+                        <arg1 type="label">_label-&amp;*$%</arg1>
                     </instruction>
                 </program>"""
             )

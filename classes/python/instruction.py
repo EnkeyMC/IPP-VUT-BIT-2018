@@ -1,5 +1,6 @@
 from classes.python.exceptions import XMLFormatError, DivisionByZeroError, OperandTypeError, StringOperationError
 from classes.python.arg import Arg, ArgType
+from classes.python import lexical_analyzer
 from xml.etree.ElementTree import Element
 import operator
 import sys
@@ -79,9 +80,17 @@ class Instruction:
     @staticmethod
     def is_valid_arg(opcode: str, nth_arg: int, arg: Element) -> bool:
         assert opcode in Instruction.INSTRUCTION_ARGS
+
         if not (1 <= nth_arg <= len(Instruction.INSTRUCTION_ARGS[opcode])):
             raise XMLFormatError('Neplatný argument arg{}'.format(nth_arg, opcode))
-        arg_type = Instruction.INSTRUCTION_ARGS[opcode][nth_arg - 1]
+
+        if 'type' not in arg.attrib:
+            raise XMLFormatError('Chybí atribut "type" argumentu arg{} instrukce {}'.format(nth_arg, opcode))
+        if len(arg.attrib) != 1:
+            raise XMLFormatError('Neplatný počet atributů argumentu arg{} instrukce {}'.format(nth_arg, opcode))
+
+        lexical_analyzer.check_validity(arg.attrib['type'], arg.text)
+
         return True  # TODO
 
     @staticmethod
