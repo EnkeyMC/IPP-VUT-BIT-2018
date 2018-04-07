@@ -47,14 +47,13 @@ class HTMLTestOutput implements TestOutput {
      * Recursively calculate result summary
      *
      * @param array $results test results and subdirectories
-     * @param string $dir current test directory name ('' by default)
-     * @param string $parent_id parent directory ID
+     * @param string $curr_dir current test directory name ('' by default)
      *
      * @return array calculated data
      */
-    private function recursiveResultCalc(array $results, $dir='') {
+    private function recursiveResultCalc(array $results, $curr_dir='') {
         $calcData = [
-            'dir' => $dir,
+            'dir' => $curr_dir,
             'dir_id' => $this->get_unique_id(),
             'success_count' => 0,
             'total_count' => 0,
@@ -80,7 +79,7 @@ class HTMLTestOutput implements TestOutput {
                     ];
                 }
             } else {
-                $subdir = $this->recursiveResultCalc($result, $dir);
+                $subdir = $this->recursiveResultCalc($result, $curr_dir.'/'.$dir);
                 $calcData['subdirs'][] = $subdir;
                 $calcData['success_count'] += $subdir['success_count'];
                 $calcData['total_count'] += $subdir['total_count'];

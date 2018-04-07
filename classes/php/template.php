@@ -53,11 +53,11 @@
         }
 
         .success {
-            background-color: #BADA55;
+            background-color: #aecc4d;
         }
 
         .success-text {
-            color: #BADA55;
+            color: #aecc4d;
         }
 
         .fail {
@@ -119,13 +119,6 @@
             height: 1.2em;
         }
 
-        .dir-details {
-            padding: 15px;
-            /*border: 1px #dddddd solid;*/
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
-        }
-
         .back-to-top {
             padding: 15px;
             background-color: rgba(0,0,0,0.7);
@@ -157,12 +150,13 @@
         <p>&nbsp;</p>
         <hr>
         <h2>Úspěšnosti podle adresářů</h2>
-        <p>Kliknutím na adresář zobrazíte detaily jednotlivých testů</p>
+        <p><strong>Kliknutím na adresář zobrazíte detaily jednotlivých testů</strong></p>
         <?php function recurDirList($dir) {
             $percent = round(100*$dir['success_count']/$dir['total_count']);
+            $dir_end = explode('/', $dir['dir']);
         ?>
         <ul class="dir-list">
-            <li><a href="#<?= $dir['dir_id'] ?>"><?= htmlspecialchars($dir['dir']) ?></a> <?= $percent ?>% (<?= $dir['success_count'].'/'.$dir['total_count'] ?>)
+            <li><a href="#<?= $dir['dir_id'] ?>"><?= htmlspecialchars(end($dir_end)) ?></a> <span class="<?= $percent == 100 ? 'success-text' : 'fail-text' ?>"><?= $percent ?>% (<?= $dir['success_count'].'/'.$dir['total_count'] ?>)</span>
                 <?php
                     foreach ($dir['subdirs'] as $subdir) {
                         recurDirList($subdir);
@@ -181,7 +175,6 @@
                 <div class="dir-details" id="<?= $dir['dir_id'] ?>">
                     <div class="dir-details-inner">
                         <h3><?= htmlspecialchars($dir['dir']); ?></h3>
-                        <hr>
                         <?php if (!empty($dir['test_info'])): ?>
                         <table class="tests-details">
                             <thead>
