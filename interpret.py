@@ -1,6 +1,7 @@
 from classes.python.ipp_parser import IPPParser
 from classes.python.program import Program
 from classes.python.exceptions import ApplicationError
+from classes.python.exit_codes import ARGUMENT_ERROR
 import argparse
 from sys import stderr
 import subprocess
@@ -12,10 +13,15 @@ def exec_parser(src_file: str):
     return result.stdout
 
 
-argparser = argparse.ArgumentParser()
-argparser.add_argument('--source')
-argparser.add_argument('--parse', action='store_const', const=True, default=False)
-args = argparser.parse_args()
+argparser = argparse.ArgumentParser(description='Interprets XML representaion of IPPcode18.')
+argparser.add_argument('--source', required=True, help='Source file to interpret')
+argparser.add_argument('--parse', action='store_const', const=True, default=False,
+                       help='Interpret asks for file name to parse and then interpret (for dev purposes)')
+args = None
+try:
+    args = argparser.parse_args()
+except SystemExit:
+    exit(ARGUMENT_ERROR)
 
 parser = IPPParser()
 xml_dom = None

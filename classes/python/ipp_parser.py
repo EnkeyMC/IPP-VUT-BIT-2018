@@ -1,4 +1,5 @@
-from classes.python.exceptions import XMLFormatError, SrcSyntaxError, LexicalError, SemanticError
+from classes.python.exceptions import XMLFormatError, SrcSyntaxError, LexicalError, ApplicationError
+from classes.python.exit_codes import INPUT_FILE_ERROR
 from classes.python.instruction import Instruction
 from xml.etree import ElementTree
 import re
@@ -17,6 +18,9 @@ class IPPParser:
             xml_dom = ElementTree.parse(file).getroot()
         except ElementTree.ParseError:
             raise XMLFormatError("Vstupní XML nemá správný formát'")
+        except FileNotFoundError:
+            raise ApplicationError("Nepodařilo se otevřít vstupní soubor '{}'".format(file), INPUT_FILE_ERROR)
+
         self._check_xml_structure(xml_dom)
         return xml_dom
 
