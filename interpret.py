@@ -3,7 +3,7 @@ from classes.python.program import Program
 from classes.python.exceptions import ApplicationError
 from classes.python.exit_codes import ARGUMENT_ERROR
 import argparse
-from sys import stderr
+from sys import stderr, argv
 import subprocess
 
 
@@ -13,10 +13,15 @@ def exec_parser(src_file: str):
     return result.stdout
 
 
-argparser = argparse.ArgumentParser(description='Interprets XML representaion of IPPcode18.')
+argparser = argparse.ArgumentParser(description='Interprets XML representaion of IPPcode18.', add_help=False)
 argparser.add_argument('--source', required=True, help='Source file to interpret')
 argparser.add_argument('--parse', action='store_const', const=True, default=False,
                        help='Interpret asks for file name to parse and then interpret (for dev purposes)')
+
+if len(argv) == 2 and argv[1] in ('-h', '--help'):
+    argparser.print_help()
+    exit(0)
+
 args = None
 try:
     args = argparser.parse_args()
