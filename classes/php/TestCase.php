@@ -123,7 +123,7 @@ class TestCase
         $result = \OSUtils::runCommand(
             $app->getConfig('py-int'),
             [$app->getConfig('int-script'), '--source="'.$sourceFile.'"'],
-            $this->filePaths[self::FILE_IN],
+            '"'.$this->filePaths[self::FILE_IN].'"',
             $tmpFile,
             $errorTmpFile
         );
@@ -137,7 +137,7 @@ class TestCase
             );
 
         if ($expectedRC == \ExitCodes::SUCCESS) {
-            $result = \OSUtils::checkFileDifference($this->filePaths[self::FILE_OUT], $tmpFile);
+            $result = \OSUtils::checkFileDifference('"'.$this->filePaths[self::FILE_OUT].'"', '"'.$tmpFile.'"');
             if ($result['return_code'] != 0)
                 $this->result->error(
                     TestResult::ERROR_OUT_DIFF,
