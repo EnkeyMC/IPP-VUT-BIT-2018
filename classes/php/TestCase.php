@@ -89,7 +89,7 @@ class TestCase
         $result = \OSUtils::runCommand(
             $app->getConfig('php-int'),
             [$app->getConfig('parse-script')],
-            $this->filePaths[self::FILE_SRC],
+            '"'.$this->filePaths[self::FILE_SRC].'"',
             $tmpFlie,
             $errorTmpFile
         );
