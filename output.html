@@ -52,11 +52,11 @@
         }
 
         .success {
-            background-color: #BADA55;
+            background-color: #aecc4d;
         }
 
         .success-text {
-            color: #BADA55;
+            color: #aecc4d;
         }
 
         .fail {
@@ -118,13 +118,6 @@
             height: 1.2em;
         }
 
-        .dir-details {
-            padding: 15px;
-            /*border: 1px #dddddd solid;*/
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
-        }
-
         .back-to-top {
             padding: 15px;
             background-color: rgba(0,0,0,0.7);
@@ -141,67 +134,161 @@
     </style>
 </head>
 <body>
-    <div class="container" id="top">
-        <h1>Přehled úspěšnosti testů</h1>
-        <hr>
-                <h2>48/52 úspěšných testů (92%)</h2>
-        <div class="progress-bar-chart">
-            <div class="bar success" style="width: 92%;">&nbsp;</div>
-            <div class="bar fail" style="width: 8%;">&nbsp;</div>
-        </div>
-        <p>&nbsp;</p>
-        <hr>
-        <h2>Úspěšnosti podle adresářů</h2>
-        <p>Kliknutím na adresář zobrazíte detaily jednotlivých testů</p>
-                <ul class="dir-list">
-            <li><a href="#dir-"></a> 92% (48/52)
-                        <ul class="dir-list">
-            <li><a href="#dir--errors">errors</a> 100% (48/48)
-                        <ul class="dir-list">
-            <li><a href="#dir--errors-arguments">arguments</a> 100% (42/42)
-                        <ul class="dir-list">
-            <li><a href="#dir--errors-arguments-constants">constants</a> 100% (16/16)
-                            </li>
-        </ul>
-                <ul class="dir-list">
-            <li><a href="#dir--errors-arguments-labels">labels</a> 100% (4/4)
-                            </li>
-        </ul>
-                <ul class="dir-list">
-            <li><a href="#dir--errors-arguments-types">types</a> 100% (4/4)
-                            </li>
-        </ul>
-                <ul class="dir-list">
-            <li><a href="#dir--errors-arguments-variables">variables</a> 100% (15/15)
-                            </li>
-        </ul>
-                    </li>
-        </ul>
-                <ul class="dir-list">
-            <li><a href="#dir--errors-header">header</a> 100% (5/5)
-                            </li>
-        </ul>
-                    </li>
-        </ul>
-                <ul class="dir-list">
-            <li><a href="#dir--header">header</a> 0% (0/4)
-                            </li>
-        </ul>
-                    </li>
-        </ul>
-                <hr>
-        <h2>Detaily jednotlivých testů</h2>
+<div class="container" id="top">
+    <h1>Přehled úspěšnosti testů</h1>
+    <hr>
+    <h2>143/148 úspěšných testů (97%)</h2>
+    <div class="progress-bar-chart">
+        <div class="bar success" style="width: 97%;">&nbsp;</div>
+        <div class="bar fail" style="width: 3%;">&nbsp;</div>
+    </div>
+    <p>&nbsp;</p>
+    <hr>
+    <h2>Úspěšnosti podle adresářů</h2>
+    <p><strong>Kliknutím na adresář zobrazíte detaily jednotlivých testů</strong></p>
+    <ul class="dir-list">
+        <li><a href="#ID0"></a> <span class="fail-text">97% (143/148)</span>
+            <ul class="dir-list">
+                <li><a href="#ID1">xomach00</a> <span class="success-text">100% (81/81)</span>
+                    <ul class="dir-list">
+                        <li><a href="#ID2">errors</a> <span class="success-text">100% (62/62)</span>
+                            <ul class="dir-list">
+                                <li><a href="#ID3">arguments</a> <span class="success-text">100% (42/42)</span>
+                                    <ul class="dir-list">
+                                        <li><a href="#ID4">constants</a> <span class="success-text">100% (16/16)</span>
+                                        </li>
+                                    </ul>
+                                    <ul class="dir-list">
+                                        <li><a href="#ID5">labels</a> <span class="success-text">100% (4/4)</span>
+                                        </li>
+                                    </ul>
+                                    <ul class="dir-list">
+                                        <li><a href="#ID6">types</a> <span class="success-text">100% (4/4)</span>
+                                        </li>
+                                    </ul>
+                                    <ul class="dir-list">
+                                        <li><a href="#ID7">variables</a> <span class="success-text">100% (15/15)</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="dir-list">
+                                <li><a href="#ID8">frames</a> <span class="success-text">100% (4/4)</span>
+                                </li>
+                            </ul>
+                            <ul class="dir-list">
+                                <li><a href="#ID9">header</a> <span class="success-text">100% (5/5)</span>
+                                </li>
+                            </ul>
+                            <ul class="dir-list">
+                                <li><a href="#ID10">types</a> <span class="success-text">100% (6/6)</span>
+                                </li>
+                            </ul>
+                            <ul class="dir-list">
+                                <li><a href="#ID11">variables</a> <span class="success-text">100% (4/4)</span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="dir-list">
+                        <li><a href="#ID12">frames</a> <span class="success-text">100% (2/2)</span>
+                        </li>
+                    </ul>
+                    <ul class="dir-list">
+                        <li><a href="#ID13">header</a> <span class="success-text">100% (4/4)</span>
+                        </li>
+                    </ul>
+                    <ul class="dir-list">
+                        <li><a href="#ID14">simple</a> <span class="success-text">100% (11/11)</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="dir-list">
+                <li><a href="#ID15">xvavra20</a> <span class="success-text">100% (22/22)</span>
+                    <ul class="dir-list">
+                        <li><a href="#ID16">errors</a> <span class="success-text">100% (13/13)</span>
+                        </li>
+                    </ul>
+                    <ul class="dir-list">
+                        <li><a href="#ID17">operations</a> <span class="success-text">100% (7/7)</span>
+                        </li>
+                    </ul>
+                    <ul class="dir-list">
+                        <li><a href="#ID18">program</a> <span class="success-text">100% (2/2)</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="dir-list">
+                <li><a href="#ID19">xwilla00</a> <span class="fail-text">89% (40/45)</span>
+                    <ul class="dir-list">
+                        <li><a href="#ID20">error</a> <span class="fail-text">87% (26/30)</span>
+                            <ul class="dir-list">
+                                <li><a href="#ID21">netestovane</a> <span class="fail-text">0% (0/1)</span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="dir-list">
+                        <li><a href="#ID22">good</a> <span class="fail-text">93% (14/15)</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <hr>
+    <h2>Detaily jednotlivých testů</h2>
 
-                        <div class="dir-details" id="dir-">
+    <div class="dir-details" id="ID0">
+        <div class="dir-details-inner">
+            <h3></h3>
+        </div>
+        <div class="dir-details" id="ID1">
+            <div class="dir-details-inner">
+                <h3>/xomach00</h3>
+                <table class="tests-details">
+                    <thead>
+                    <tr>
+                        <th>Název testu</th>
+                        <th>Detaily chyby</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="success-text">
+                        <td>crazy_names</td>
+                        <td>Úspěšný</td>
+                    </tr>
+                    <tr class="success-text">
+                        <td>malicious_chars_in_string</td>
+                        <td>Úspěšný</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="dir-details" id="ID2">
+                <div class="dir-details-inner">
+                    <h3>/xomach00/errors</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>invalid_opcode</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dir-details" id="ID3">
                     <div class="dir-details-inner">
-                        <h3></h3>
-                        <hr>
-                                            </div>
-                                    <div class="dir-details" id="dir--errors">
-                    <div class="dir-details-inner">
-                        <h3>errors</h3>
-                        <hr>
-                                                <table class="tests-details">
+                        <h3>/xomach00/errors/arguments</h3>
+                        <table class="tests-details">
                             <thead>
                             <tr>
                                 <th>Název testu</th>
@@ -209,266 +296,242 @@
                             </tr>
                             </thead>
                             <tbody>
-                                                        <tr class="success-text">
-                                <td>invalid_opcode</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        </tbody>
-                        </table>
-                                            </div>
-                                    <div class="dir-details" id="dir--errors-arguments">
-                    <div class="dir-details-inner">
-                        <h3>arguments</h3>
-                        <hr>
-                                                <table class="tests-details">
-                            <thead>
-                            <tr>
-                                <th>Název testu</th>
-                                <th>Detaily chyby</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                                        <tr class="success-text">
+                            <tr class="success-text">
                                 <td>add_4_args</td>
                                 <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="success-text">
+                            <tr class="success-text">
                                 <td>createframe_1_arg</td>
                                 <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="success-text">
+                            <tr class="success-text">
                                 <td>move_3_args</td>
                                 <td>Úspěšný</td>
                             </tr>
-                                                        </tbody>
+                            </tbody>
                         </table>
-                                            </div>
-                                    <div class="dir-details" id="dir--errors-arguments-constants">
-                    <div class="dir-details-inner">
-                        <h3>constants</h3>
-                        <hr>
-                                                <table class="tests-details">
-                            <thead>
-                            <tr>
-                                <th>Název testu</th>
-                                <th>Detaily chyby</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_01</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_02</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_03</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_04</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_05</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_06</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_07</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_08</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_09</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>bool_invalid_10</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>int_invalid_01</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>int_invalid_02</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>int_invalid_03</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>string_invalid_01</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>string_invalid_02</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>string_invalid_03</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        </tbody>
-                        </table>
-                                            </div>
-                                    </div>
-                        <div class="dir-details" id="dir--errors-arguments-labels">
-                    <div class="dir-details-inner">
-                        <h3>labels</h3>
-                        <hr>
-                                                <table class="tests-details">
-                            <thead>
-                            <tr>
-                                <th>Název testu</th>
-                                <th>Detaily chyby</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                                        <tr class="success-text">
-                                <td>const_as_label</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_01</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_02</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>var_as_label</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        </tbody>
-                        </table>
-                                            </div>
-                                    </div>
-                        <div class="dir-details" id="dir--errors-arguments-types">
-                    <div class="dir-details-inner">
-                        <h3>types</h3>
-                        <hr>
-                                                <table class="tests-details">
-                            <thead>
-                            <tr>
-                                <th>Název testu</th>
-                                <th>Detaily chyby</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                                        <tr class="success-text">
-                                <td>invalid_type_01</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_type_02</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_type_03</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_type_04</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        </tbody>
-                        </table>
-                                            </div>
-                                    </div>
-                        <div class="dir-details" id="dir--errors-arguments-variables">
-                    <div class="dir-details-inner">
-                        <h3>variables</h3>
-                        <hr>
-                                                <table class="tests-details">
-                            <thead>
-                            <tr>
-                                <th>Název testu</th>
-                                <th>Detaily chyby</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                                        <tr class="success-text">
-                                <td>const_instead_of_var</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_01</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_02</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_03</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_04</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_05</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_06</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_07</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_char_08</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_frame_01</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_frame_02</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_frame_03</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_frame_04</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>invalid_frame_05</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        <tr class="success-text">
-                                <td>no_at_sign</td>
-                                <td>Úspěšný</td>
-                            </tr>
-                                                        </tbody>
-                        </table>
-                                            </div>
-                                    </div>
+                    </div>
+                    <div class="dir-details" id="ID4">
+                        <div class="dir-details-inner">
+                            <h3>/xomach00/errors/arguments/constants</h3>
+                            <table class="tests-details">
+                                <thead>
+                                <tr>
+                                    <th>Název testu</th>
+                                    <th>Detaily chyby</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="success-text">
+                                    <td>bool_invalid_01</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_02</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_03</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_04</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_05</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_06</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_07</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_08</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_09</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>bool_invalid_10</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>int_invalid_01</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>int_invalid_02</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>int_invalid_03</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>string_invalid_01</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>string_invalid_02</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>string_invalid_03</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="dir-details" id="dir--errors-header">
+                    </div>
+                    <div class="dir-details" id="ID5">
+                        <div class="dir-details-inner">
+                            <h3>/xomach00/errors/arguments/labels</h3>
+                            <table class="tests-details">
+                                <thead>
+                                <tr>
+                                    <th>Název testu</th>
+                                    <th>Detaily chyby</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="success-text">
+                                    <td>const_as_label</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_01</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_02</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>var_as_label</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="dir-details" id="ID6">
+                        <div class="dir-details-inner">
+                            <h3>/xomach00/errors/arguments/types</h3>
+                            <table class="tests-details">
+                                <thead>
+                                <tr>
+                                    <th>Název testu</th>
+                                    <th>Detaily chyby</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="success-text">
+                                    <td>invalid_type_01</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_type_02</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_type_03</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_type_04</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="dir-details" id="ID7">
+                        <div class="dir-details-inner">
+                            <h3>/xomach00/errors/arguments/variables</h3>
+                            <table class="tests-details">
+                                <thead>
+                                <tr>
+                                    <th>Název testu</th>
+                                    <th>Detaily chyby</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="success-text">
+                                    <td>const_instead_of_var</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_01</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_02</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_03</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_04</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_05</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_06</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_07</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_char_08</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_frame_01</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_frame_02</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_frame_03</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_frame_04</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>invalid_frame_05</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                <tr class="success-text">
+                                    <td>no_at_sign</td>
+                                    <td>Úspěšný</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="dir-details" id="ID8">
                     <div class="dir-details-inner">
-                        <h3>header</h3>
-                        <hr>
-                                                <table class="tests-details">
+                        <h3>/xomach00/errors/frames</h3>
+                        <table class="tests-details">
                             <thead>
                             <tr>
                                 <th>Název testu</th>
@@ -476,36 +539,65 @@
                             </tr>
                             </thead>
                             <tbody>
-                                                        <tr class="success-text">
+                            <tr class="success-text">
+                                <td>no_tmp_frame</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            <tr class="success-text">
+                                <td>popframe_without_pushframe</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            <tr class="success-text">
+                                <td>pushframe_invalidates_tmp_frame</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            <tr class="success-text">
+                                <td>push_no_tmp</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="dir-details" id="ID9">
+                    <div class="dir-details-inner">
+                        <h3>/xomach00/errors/header</h3>
+                        <table class="tests-details">
+                            <thead>
+                            <tr>
+                                <th>Název testu</th>
+                                <th>Detaily chyby</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="success-text">
                                 <td>comment_before_header</td>
                                 <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="success-text">
+                            <tr class="success-text">
                                 <td>comment_with_header</td>
                                 <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="success-text">
+                            <tr class="success-text">
                                 <td>empty</td>
                                 <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="success-text">
+                            <tr class="success-text">
                                 <td>empty_lines_before_header</td>
                                 <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="success-text">
+                            <tr class="success-text">
                                 <td>invalid_header</td>
                                 <td>Úspěšný</td>
                             </tr>
-                                                        </tbody>
+                            </tbody>
                         </table>
-                                            </div>
-                                    </div>
-                        </div>
-                        <div class="dir-details" id="dir--header">
+                    </div>
+                </div>
+                <div class="dir-details" id="ID10">
                     <div class="dir-details-inner">
-                        <h3>header</h3>
-                        <hr>
-                                                <table class="tests-details">
+                        <h3>/xomach00/errors/types</h3>
+                        <table class="tests-details">
                             <thead>
                             <tr>
                                 <th>Název testu</th>
@@ -513,28 +605,554 @@
                             </tr>
                             </thead>
                             <tbody>
-                                                        <tr class="fail-text">
-                                <td>comment_after_header</td>
-                                <td>Nesouhlasí výstup interpretu.<br><br>0a1<br>> Hello world!<br><br>STDERR:<br></td>
+                            <tr class="success-text">
+                                <td>bool_const_in_add</td>
+                                <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="fail-text">
-                                <td>header_leading_spaces</td>
-                                <td>Nesouhlasí výstup interpretu.<br><br>0a1<br>> Hello world!<br><br>STDERR:<br></td>
+                            <tr class="success-text">
+                                <td>bool_var_in_add</td>
+                                <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="fail-text">
-                                <td>header_trailing_spaces</td>
-                                <td>Nesouhlasí výstup interpretu.<br><br>0a1<br>> Hello world!<br><br>STDERR:<br></td>
+                            <tr class="success-text">
+                                <td>label_in_add</td>
+                                <td>Úspěšný</td>
                             </tr>
-                                                        <tr class="fail-text">
-                                <td>simple_header</td>
-                                <td>Nesouhlasí výstup interpretu.<br><br>0a1<br>> Hello world!<br><br>STDERR:<br></td>
+                            <tr class="success-text">
+                                <td>string_const_in_add</td>
+                                <td>Úspěšný</td>
                             </tr>
-                                                        </tbody>
+                            <tr class="success-text">
+                                <td>string_var_in_add</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            <tr class="success-text">
+                                <td>type_in_add</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            </tbody>
                         </table>
-                                            </div>
-                                    </div>
-                        </div>
+                    </div>
+                </div>
+                <div class="dir-details" id="ID11">
+                    <div class="dir-details-inner">
+                        <h3>/xomach00/errors/variables</h3>
+                        <table class="tests-details">
+                            <thead>
+                            <tr>
+                                <th>Název testu</th>
+                                <th>Detaily chyby</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="success-text">
+                                <td>undefined_var_in_dprint</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            <tr class="success-text">
+                                <td>uninitialized_var_in_add</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            <tr class="success-text">
+                                <td>using_undefined_var</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            <tr class="success-text">
+                                <td>write_uninitialized_var</td>
+                                <td>Úspěšný</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-    <a href="#top" class="back-to-top">Zpět nahoru</a>
+            <div class="dir-details" id="ID12">
+                <div class="dir-details-inner">
+                    <h3>/xomach00/frames</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>a_lot_of_local_frames</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>many_createframes</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dir-details" id="ID13">
+                <div class="dir-details-inner">
+                    <h3>/xomach00/header</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>comment_after_header</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>header_leading_spaces</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>header_trailing_spaces</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>simple_header</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dir-details" id="ID14">
+                <div class="dir-details-inner">
+                    <h3>/xomach00/simple</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>aritmetic</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>assign_and_write</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>debug</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>frames_and_vars</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>int2char</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>jumps</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>logical</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>read</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>stri2int</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>strings</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="dir-details" id="ID15">
+            <div class="dir-details-inner">
+                <h3>/xvavra20</h3>
+            </div>
+            <div class="dir-details" id="ID16">
+                <div class="dir-details-inner">
+                    <h3>/xvavra20/errors</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>concat_2_int</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>getchar-err</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>getchar-err2</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>int2char-err</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>more_calls_than_labels</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>popframe-err</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>pops-err</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>pushframe-err</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>setchar-err</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>setchar-err2</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>setchar-err3</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>stri2int-err</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>stri2int-err2</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dir-details" id="ID17">
+                <div class="dir-details-inner">
+                    <h3>/xvavra20/operations</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>arithetic</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>boolOpers</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>compare</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>str2int_int2char</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>string_ecs</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>string_opers</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dir-details" id="ID18">
+                <div class="dir-details-inner">
+                    <h3>/xvavra20/program</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>factorial</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>fibonachi</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="dir-details" id="ID19">
+            <div class="dir-details-inner">
+                <h3>/xwilla00</h3>
+            </div>
+            <div class="dir-details" id="ID20">
+                <div class="dir-details-inner">
+                    <h3>/xwilla00/error</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>add_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>and_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>concat_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>concat_type2</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>eq_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>getchar_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>getchar_type2</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>gt_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>idiv_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>int2char_index</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>int2char_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>lt_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>mul_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>not_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>or_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>redefine_label</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>setchar_index</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>setchar_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>setchar_type2</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="fail-text">
+                            <td>stri2int_index</td>
+                            <td>Chybný návratový kód parse skriptu.<br>Očekávaný: 58<br>Skutečný: 21<br><br>STDERR:<br>Error on line 5: Expected argument, got &quot;&quot;.
+                            </td>
+                        </tr>
+                        <tr class="fail-text">
+                            <td>stri2int_type</td>
+                            <td>Chybný návratový kód parse skriptu.<br>Očekávaný: 53<br>Skutečný: 21<br><br>STDERR:<br>Error on line 5: Expected argument, got &quot;&quot;.
+                            </td>
+                        </tr>
+                        <tr class="fail-text">
+                            <td>stri2int_type_2</td>
+                            <td>Chybný návratový kód parse skriptu.<br>Očekávaný: 53<br>Skutečný: 21<br><br>STDERR:<br>Error on line 5: Expected argument, got &quot;&quot;.
+                            </td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>strlen_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>sub_type</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test1</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test2</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test3</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>undefined_variable</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>zero_div</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dir-details" id="ID21">
+                    <div class="dir-details-inner">
+                        <h3>/xwilla00/error/netestovane</h3>
+                        <table class="tests-details">
+                            <thead>
+                            <tr>
+                                <th>Název testu</th>
+                                <th>Detaily chyby</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="fail-text">
+                                <td>getchar_index</td>
+                                <td>Chybný návratový kód interpretu.<br>Očekávaný: 58<br>Skutečný: 0<br><br>STDERR:<br></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="dir-details" id="ID22">
+                <div class="dir-details-inner">
+                    <h3>/xwilla00/good</h3>
+                    <table class="tests-details">
+                        <thead>
+                        <tr>
+                            <th>Název testu</th>
+                            <th>Detaily chyby</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success-text">
+                            <td>simple_add</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>simple_function</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>simple_idiv</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>simple_mul</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>simple_sub</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>some_frames</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test1</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test2</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test3</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test4</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test5</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test6</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test7</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        <tr class="fail-text">
+                            <td>test_move</td>
+                            <td>Chybný návratový kód parse skriptu.<br>Očekávaný: 0<br>Skutečný: 21<br><br>STDERR:<br>Error on line 4: Expected valid argument, got &quot;GR@aaa&quot;.
+                            </td>
+                        </tr>
+                        <tr class="success-text">
+                            <td>test_pushpopframe</td>
+                            <td>Úspěšný</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="#top" class="back-to-top">Zpět nahoru</a>
 </body>
 </html>
