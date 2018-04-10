@@ -123,14 +123,14 @@ final class OSUtils {
             try {
                 $directoryIterator = new RecursiveDirectoryIterator($directory);
             } catch (UnexpectedValueException $e) {
-                throw new InvalidArgumentException("Invalid directory '".$directory."'");
+                throw new InvalidArgumentException("Invalid directory '".$directory."'", ExitCodes::ERROR_OPENING_FILE_IN);
             }
             $iterator = new RecursiveIteratorIterator($directoryIterator);
         } else {
             try {
                 $directoryIterator = new DirectoryIterator($directory);
             } catch (UnexpectedValueException $e) {
-                throw new InvalidArgumentException("Invalid directory '".$directory."'");
+                throw new InvalidArgumentException("Invalid directory '".$directory."'", ExitCodes::ERROR_OPENING_FILE_IN);
             }
             $iterator = new IteratorIterator($directoryIterator);
         }
