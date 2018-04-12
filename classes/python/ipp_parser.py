@@ -4,6 +4,10 @@ from classes.python.instruction import Instruction
 from xml.etree import ElementTree
 import re
 
+__author__ = "Martin Omacht"
+__copyright__ = "Copyright 2018"
+__credits__ = ["Martin Omacht"]
+
 
 class IPPParser:
     """
@@ -11,9 +15,17 @@ class IPPParser:
     """
 
     def __init__(self):
+        """
+        Initialize parser
+        """
         self.arg_regex = re.compile(r"^arg(\d+)$")
 
     def parse_from_file(self, file: str) -> ElementTree.Element:
+        """
+        Parse XML from given file
+        :param file: file with xml
+        :return: root XML DOM element
+        """
         try:
             xml_dom = ElementTree.parse(file).getroot()
         except ElementTree.ParseError:
@@ -25,6 +37,11 @@ class IPPParser:
         return xml_dom
 
     def parse_from_string(self, xml_string: str) -> ElementTree.Element:
+        """
+        Parse XML from given string
+        :param xml_string: string with xml
+        :return: root XML DOM element
+        """
         try:
             xml_dom = ElementTree.fromstring(xml_string)
         except ElementTree.ParseError:
@@ -32,11 +49,19 @@ class IPPParser:
         self._check_xml_structure(xml_dom)
         return xml_dom
 
-    def _check_xml_structure(self, xml_dom: ElementTree.Element) -> None:
+    def _check_xml_structure(self, xml_dom: ElementTree.Element):
+        """
+        Check if XML structure is valid
+        :param xml_dom: root XML DOM element
+        """
         self._check_root_elem(xml_dom)
         self._check_instructions(xml_dom)
 
-    def _check_root_elem(self, root_elem: ElementTree.Element) -> None:
+    def _check_root_elem(self, root_elem: ElementTree.Element):
+        """
+        Check root element
+        :param root_elem: XML DOM root element
+        """
         if root_elem.tag != "program":
             raise XMLFormatError("Vstupní XML musí mít kořenový element <program>")
 
@@ -53,7 +78,11 @@ class IPPParser:
         if not has_language:
             raise XMLFormatError("Kořenový element <program> musí obsahovat atribut 'language=\"IPPcode18\"'")
 
-    def _check_instructions(self, root_elem: ElementTree.Element) -> None:
+    def _check_instructions(self, root_elem: ElementTree.Element):
+        """
+        Check instructions
+        :param root_elem: XML DOM root element
+        """
         for instruction in root_elem:
             if instruction.tag != "instruction":
                 raise XMLFormatError("Neočekávaný element {}".format(instruction.tag))
@@ -63,6 +92,10 @@ class IPPParser:
             self._check_instruction_args(instruction)
 
     def _check_instruction_attribs(self, instruction: ElementTree.Element):
+        """
+        Check instruction attributes
+        :param instruction: XML DOM instruction element
+        """
         has_opcode = has_order = False
         for attrib, value in instruction.attrib.items():
             if attrib == "order":
@@ -83,6 +116,10 @@ class IPPParser:
             raise XMLFormatError("Chybí atribut 'order' nebo 'opcode' v elementu <instruction>")
 
     def _check_instruction_args(self, instruction: ElementTree.Element):
+        """
+        Check instruction arguments
+        :param instruction: XML DOM instruction element
+        """
         args = list()
         opcode = instruction.attrib['opcode']
         order = instruction.attrib['order']
@@ -93,8 +130,7 @@ class IPPParser:
                 if nth in args:
                     raise XMLFormatError("Duplikátní argument {} instrukce {}".format(arg.tag, order))
                 args.append(nth)
-                if not Instruction.is_valid_arg(opcode, nth, arg):
-                    raise SrcSyntaxError("Nesprávný typ argumentu operace {} instrukce {}".format(opcode, order))
+                Instruction.is_valid_arg(opcode, nth, arg)
             else:
                 raise XMLFormatError("Neplatný agrument {} instrukce {}".format(arg.tag, order))
 

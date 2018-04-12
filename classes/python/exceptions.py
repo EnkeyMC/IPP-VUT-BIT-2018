@@ -1,16 +1,35 @@
 from classes.python.exit_codes import *
 
+__author__ = "Martin Omacht"
+__copyright__ = "Copyright 2018"
+__credits__ = ["Martin Omacht"]
+
 
 class ApplicationError(Exception):
-
+    """
+    Base class for application exceptions
+    """
     def __init__(self, message: str, exit_code: int):
+        """
+        Initialize object with message and exit code
+        :param message: Error message
+        :param exit_code: Exit code
+        """
         self._message = message
         self._exit_code = exit_code
 
     def get_message(self):
+        """
+        Get exception error message
+        :return: error message
+        """
         return self._message
 
     def get_exit_code(self):
+        """
+        Get exception exit code
+        :return: exit code
+        """
         return self._exit_code
 
 

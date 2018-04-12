@@ -5,8 +5,16 @@ from xml.etree.ElementTree import Element
 import operator
 import sys
 
+__author__ = "Martin Omacht"
+__copyright__ = "Copyright 2018"
+__credits__ = ["Martin Omacht"]
+
 
 class Instruction:
+    """
+    Class representing IPPcode18 instruction
+    """
+    # Instruction arguments definition
     INSTRUCTION_ARGS = {
         'MOVE': [ArgType.arg_dest, ArgType.arg_any],
         'CREATEFRAME': [],
@@ -44,22 +52,41 @@ class Instruction:
         'BREAK': []
     }
 
-    _inst_mapping = dict()
+    _inst_mapping = dict()  # Here is saved opcode to function mapping
 
     def __init__(self, opcode: str, args: list):
+        """
+        Initialize Instruction object with opcode and arguments
+        :param opcode:
+        :param args:
+        """
         self.opcode = opcode
         self.args = args
 
     def run(self, context):
-        self._check_arguments(context)
-        Instruction._inst_mapping[self.opcode](context, *self.args)
+        """
+        Run instruction
+        :param context: Program context
+        """
+        self._check_arguments(context)  # Check instruction arguments
+        Instruction._inst_mapping[self.opcode](context, *self.args)  # Get instruction function and invoke it
 
     def _check_arguments(self, context):
+        """
+        Check if instruction arguments are valid
+        :param context: Program context
+        """
         for i in range(0, len(self.args)):
             Instruction.INSTRUCTION_ARGS[self.opcode][i](context, self.args[i])
 
     @staticmethod
     def run_func(func: callable):
+        """
+        Used as decorator to map functions to instruction opcodes,
+        function has to have same name as opcode with leading underscore.
+        :param func: Function to map
+        :return: unchanged function
+        """
         name = func.__name__
         name = name[1:]
         Instruction._inst_mapping[name.upper()] = func
@@ -67,6 +94,11 @@ class Instruction:
 
     @staticmethod
     def from_xml_dom(inst_dom: Element):
+        """
+        Parse instruction from XML DOM element
+        :param inst_dom: instruction XML DOM element
+        :return: new Instruction instance loaded from XML
+        """
         opcode = inst_dom.attrib['opcode']
         args = list()
 
@@ -78,7 +110,13 @@ class Instruction:
         return Instruction(opcode, args)
 
     @staticmethod
-    def is_valid_arg(opcode: str, nth_arg: int, arg: Element) -> bool:
+    def is_valid_arg(opcode: str, nth_arg: int, arg: Element):
+        """
+        Check if given argument in XML DOM element form is valid
+        :param opcode: instruction opcode (expects a valid opcode)
+        :param nth_arg: argument position
+        :param arg: XML DOM element
+        """
         assert opcode in Instruction.INSTRUCTION_ARGS
 
         if not (1 <= nth_arg <= len(Instruction.INSTRUCTION_ARGS[opcode])):
@@ -91,14 +129,22 @@ class Instruction:
 
         lexical_analyzer.check_validity(arg.attrib['type'], arg.text)
 
-        return True  # TODO
-
     @staticmethod
     def get_opcode_arg_num(opcode: str) -> int:
+        """
+        Get number of arguments for given opcode
+        :param opcode: instruction opcode (expects valid opcode)
+        :return: number of arguments
+        """
         assert opcode in Instruction.INSTRUCTION_ARGS
         return len(Instruction.INSTRUCTION_ARGS[opcode])
 
 
+#############################
+#   INSTRUCTION FUNCTIONS   #
+#############################
+
+# Helper functions
 def _binary_operation(context, dest: Arg, op1: Arg, op2: Arg, op):
     dest.set_value(context, op(op1.get_value(context), op2.get_value(context)))
 
@@ -227,7 +273,17 @@ def _stri2int(context, dest: Arg, src_str: Arg, idx: Arg):
 
 @Instruction.run_func
 def _read(context, var: Arg, in_type: Arg):
-    read = input()
+    try:
+        read = input()
+    except EOFError:
+        if in_type.value == 'int':
+            var.set_value(context, 0)
+        elif in_type.value == 'string':
+            var.set_value(context, '')
+        else:
+            var.set_value(context, False)
+        return
+
     if in_type.value == 'int':
         try:
             var.set_value(context, int(read))

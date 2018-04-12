@@ -1,3 +1,8 @@
+__author__ = "Martin Omacht"
+__copyright__ = "Copyright 2018"
+__credits__ = ["Martin Omacht"]
+
+
 EXIT_SUCCESS = 0
 
 ARGUMENT_ERROR = 10

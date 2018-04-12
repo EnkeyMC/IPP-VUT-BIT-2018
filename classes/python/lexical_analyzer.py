@@ -1,6 +1,10 @@
 from classes.python.exceptions import LexicalError, SrcSyntaxError
 import re
 
+__author__ = "Martin Omacht"
+__copyright__ = "Copyright 2018"
+__credits__ = ["Martin Omacht"]
+
 
 _TYPE_REGEX = {
     'int': re.compile(r"^[+\-]?(0|[1-9]\d*)$"),
@@ -13,6 +17,11 @@ _TYPE_REGEX = {
 
 
 def check_validity(val_type: str, value: str):
+    """
+    Check argument validity
+    :param val_type: value type
+    :param value: value
+    """
     if val_type not in _TYPE_REGEX:
         raise SrcSyntaxError('Typ "{}" není validní'.format(val_type))
     if value is None:
